@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <link rel="stylesheet" href="../../css/background_black.css">
+
+  <style>
+    #products{
+      display: grid;
+      width: 40em;
+      grid-template-columns: repeat(3, 30%);
+      justify-content: center;
+      gap: 10px 10px;
+      margin: auto;
+    }
+    .buttons{
+      margin-top: 2em;
+      text-align: center;
+    }
+    fieldset img{
+      width: 100%;
+      height: 600px;
+      object-fit: contain;
+    }
+    p{
+      text-align: center;
+    }
+    .detail{
+      color: black;
+    }
+    .detail:hover{
+      color: blue;
+    }
+    .desc{
+      margin-top: 2em;
+    }
+    fieldset{
+      height: 28em;
+    }
+  </style>
+</head>
+<body>
+  <div id="menu">
+    <div id="logo">
+      <img src="../../images/logo.png" alt="">
+      <h1 id="title" style="padding-left: 1em;">유리하는 시간 glass_time_studio</h1>
+    </div>
+    <ul>
+      <li><a href="../../index.html">홈으로</a></li>
+      <li><a href="../../layouts/announcement/event_announcement.html">이벤트/공지사항</a></li>
+      <li><a href="../../layouts/class/class.html">클래스</a></li>
+      <li><a href="../../layouts/product/product.html">제품 구매하기</a></li>
+      <li><a href="../../layouts/review/review.html">수강생 후기</a></li>
+    </ul>
+  </div>
+
+  <div id="products">
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <img src="../../images/glass_sunflower.jpg" alt="">
+      <div class="desc">
+        <p>제품명 : 해바라기 화병 세트</p>
+        <p>가격 : 210,000원</p>
+        <p>재고 : 5</p>
+      </div>
+      <div class="buttons">
+        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
+        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
+      </div>
+    </fieldset>
+
+
+  <!-- 데이터 조회 후 동적으로 fieldset 태그 생성하는 함수 -->
+  <!-- 추후 판매 제품 조회 api 완성되면 수정 예정 -->
+  <script>
+    async function fetchProducts() {
+    try {
+      const response = await fetch('API_URL'); // 실제 요청할 API URL로 변경
+      const products = await response.json(); // 응답을 JSON 형태로 파싱
+
+      const productsContainer = document.getElementById('products');
+
+      products.forEach(product => {
+        const fieldset = document.createElement('fieldset');
+        const img = document.createElement('img');
+        img.src = product.s_product_img;
+        fieldset.appendChild(img);
+
+        const pTitle = document.createElement('p');
+        pTitle.textContent = `제품명: ${product.s_product_title}`;
+        fieldset.appendChild(pTitle);
+
+        // 나머지 필드에 대한 요소 생성 및 추가
+        // 예: 설명, 제작 기간, 가격, 재고 등
+
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.className = 'buttons';
+
+        const cartButton = document.createElement('button');
+        cartButton.textContent = '장바구니 추가';
+        buttonsDiv.appendChild(cartButton);
+
+        const buyButton = document.createElement('button');
+        buyButton.textContent = '구매하기';
+        buttonsDiv.appendChild(buyButton);
+
+        fieldset.appendChild(buttonsDiv);
+
+        productsContainer.appendChild(fieldset);
+      });
+    } catch (error) {
+      console.error('제품 정보를 불러오는데 실패했습니다.', error);
+    }
+}
+
+  </script>
+</body>
+</html>
