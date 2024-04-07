@@ -33,9 +33,6 @@
     .detail:hover{
       color: blue;
     }
-    .desc{
-      margin-top: 2em;
-    }
     fieldset{
       height: 28em;
     }
@@ -55,126 +52,46 @@
       <li><a href="../../layouts/review/review.html">수강생 후기</a></li>
     </ul>
   </div>
-
   <div id="products">
     <fieldset>
       <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
+      <p>제품명 : <span id="s_product_title">해바라기 화병 세트</span></p>
+      <p>가격 : <span id="s_product_price">210,000원</span></p>
+      <p>재고 : <span id="s_product_quantity">5</span></p>
       <div class="buttons">
         <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
         <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
       </div>
     </fieldset>
-
-    <fieldset>
-      <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
-      <div class="buttons">
-        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
-        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
-      <div class="buttons">
-        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
-        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
-      <div class="buttons">
-        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
-        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
-      <div class="buttons">
-        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
-        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <img src="../../images/glass_sunflower.jpg" alt="">
-      <div class="desc">
-        <p>제품명 : 해바라기 화병 세트</p>
-        <p>가격 : 210,000원</p>
-        <p>재고 : 5</p>
-      </div>
-      <div class="buttons">
-        <button><a class="detail" href="../product/product_detail.html">상세보기</a></button>
-        <button><a class="detail"  target="_blank" href="https://smartstore.naver.com/glasstime/products/9846789288">구매하기</a></button>
-      </div>
-    </fieldset>
+  </div>
 
 
-  <!-- 데이터 조회 후 동적으로 fieldset 태그 생성하는 함수 -->
-  <!-- 추후 판매 제품 조회 api 완성되면 수정 예정 -->
+
   <script>
-    async function fetchProducts() {
-    try {
-      const response = await fetch('API_URL'); // 실제 요청할 API URL로 변경
-      const products = await response.json(); // 응답을 JSON 형태로 파싱
+    // API 요청을 통해 제품 데이터를 조회
+    fetch('YOUR_API_ENDPOINT') // YOUR_API_ENDPOINT를 실제 제품 데이터를 조회할 수 있는 서버의 API 엔드포인트로 변경
+        .then(response => response.json()) // 응답을 JSON 형식으로 파싱합니다.
+        .then(data => {
+            // 응답받은 제품 데이터를 표시할 div 태그를 할당.
+            const productsContainer = document.getElementById('products');
 
-      const productsContainer = document.getElementById('products');
-
-      products.forEach(product => {
-        const fieldset = document.createElement('fieldset');
-        const img = document.createElement('img');
-        img.src = product.s_product_img;
-        fieldset.appendChild(img);
-
-        const pTitle = document.createElement('p');
-        pTitle.textContent = `제품명: ${product.s_product_title}`;
-        fieldset.appendChild(pTitle);
-
-        // 나머지 필드에 대한 요소 생성 및 추가
-        // 예: 설명, 제작 기간, 가격, 재고 등
-
-        const buttonsDiv = document.createElement('div');
-        buttonsDiv.className = 'buttons';
-
-        const cartButton = document.createElement('button');
-        cartButton.textContent = '장바구니 추가';
-        buttonsDiv.appendChild(cartButton);
-
-        const buyButton = document.createElement('button');
-        buyButton.textContent = '구매하기';
-        buttonsDiv.appendChild(buyButton);
-
-        fieldset.appendChild(buttonsDiv);
-
-        productsContainer.appendChild(fieldset);
-      });
-    } catch (error) {
-      console.error('제품 정보를 불러오는데 실패했습니다.', error);
-    }
-}
-
+            // 파싱받은 데이터를 토대로 <fieldset>와 <p> 생성.
+            data.forEach(product => {
+                const fieldset = document.createElement('fieldset');
+                fieldset.innerHTML = `
+                    <img src="${product.s_product_img1}" alt="${product.s_product_title}">
+                    <p>제품명: ${product.s_product_title}</p>
+                    <p>가격: ${product.s_product_price}</p>
+                    <p>재고: ${product.s_product_quantity}</p>
+                    <div class="buttons">
+                    <button><a class="detail" href="../product/product_detail.html?s_product_id=${product.s_product_id}">상세보기</a></button>
+                    <button><a target="_blank" href="https://smartstore.naver.com/glasstime/products/${product.s_product_code}">구매하기</a></button>
+                    </div>
+                `;
+                productsContainer.appendChild(fieldset);
+            });
+        })
+        .catch(error => console.error('Error:', error));
   </script>
 </body>
 </html>
