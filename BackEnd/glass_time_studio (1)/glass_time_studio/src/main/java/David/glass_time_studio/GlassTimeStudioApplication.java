@@ -9,5 +9,4 @@ public class GlassTimeStudioApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GlassTimeStudioApplication.class, args);
 	}
-
 }
