@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -18,9 +19,9 @@ public class Auditable {
 
     @CreatedDate
     @Column(name="created_At", updatable = false)
-    private LocalDate created_At;
+    private LocalDateTime created_At;
 
     @LastModifiedDate
     @Column(name="modified_At")
-    private LocalDate modified_At;
+    private LocalDateTime modified_At;
 }
