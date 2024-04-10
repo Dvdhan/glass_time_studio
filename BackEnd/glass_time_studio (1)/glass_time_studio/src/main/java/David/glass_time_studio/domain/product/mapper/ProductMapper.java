@@ -10,7 +10,7 @@ import java.util.List;
 public interface ProductMapper {
 
     Product productDtoPostToProduct (ProductDto.Post post);
-    Product productDtoPutToProduct (ProductDto.Put put);
+    Product productDtoPatchToProduct (ProductDto.Patch patch);
     ProductDto.Response productToProductDtoResponse (Product product);
     List<ProductDto.Response> productsToProductDtoResponse (List<Product> products);
 }

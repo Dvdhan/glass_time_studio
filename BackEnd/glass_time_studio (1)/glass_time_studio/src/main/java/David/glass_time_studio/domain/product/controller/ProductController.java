@@ -79,10 +79,11 @@ public class ProductController {
                 new MultiResponse<>(responses, pageInfo),HttpStatus.OK);
     }
 
+    // 단일 상품 수정
     @PatchMapping("/{product_Id}")
     public ResponseEntity updateProduct(@PathVariable("product_Id")@Positive Long product_id,
-                                        @RequestBody ProductDto.Put put){
-        Product product = productMapper.productDtoPutToProduct(put);
+                                        @RequestBody ProductDto.Patch patch){
+        Product product = productMapper.productDtoPatchToProduct(patch);
         Product updatedProduct = productService.updateProduct(product, product_id);
         ProductDto.Response response = productMapper.productToProductDtoResponse(updatedProduct);
         return new ResponseEntity(response, HttpStatus.OK);
