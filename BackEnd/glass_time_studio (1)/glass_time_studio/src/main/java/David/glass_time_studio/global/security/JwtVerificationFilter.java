@@ -72,8 +72,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 // verifyJws 메서드를 통해 claims에 할당된 token 값, key 값을
                 // SecurityContextHolder에 셋팅
                 setAuthenticationToContext(claims);
-            } catch (SignatureException se) {
-                request.setAttribute("exception", se);
             }
             // 토큰이 기간 만료일 경우, request header에서 Refresh를 가지고옴
             catch (ExpiredJwtException ee){
@@ -209,13 +207,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         // 요청자를 구분하여 resource에 접근하려는 주체를 구분할 수 있다. + Request URL의 간단함.
 
         // 토큰의 claims(payload)에서 email을 가져온다.
-//        String memberId = (String) claims.get("memberId");
-        String email = (String) claims.get("email");
+        String member_Id = (String) claims.get("member_Id");
+//        String email = (String) claims.get("email");
         // 토큰의 claims(payload)에서 role을 가져와서 createAuthorities 메서드를 통해 권한을 생성
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
 
         // Principal : memberId, password : null, role을 가져와 생성한 authorities로 Authentication 객체 생성.
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(member_Id, null, authorities);
         // SecurityContextHolder 에서 보관하는 Context로써 새로 생성한 authenticaiton 객체를 저장함.
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
