@@ -25,15 +25,16 @@ public class Member {
     @Column
     private String email;
     @Column
-    private Long mobile;
+    private String mobile;
     @Column
-    private Date birthday;
+    private String birthday;
     @Column
-    private Year birthyear;
+    private String age;
     @Column
     private String oauthType;
+    @Column
     @ElementCollection
-    private List<String> roles = new ArrayList<>();
+    private List<String> permit = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;
