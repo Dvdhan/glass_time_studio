@@ -4,6 +4,11 @@ spring:
       prefix: /WEB-INF/views/  #경로 설정
       suffix: .jsp             # 파일 확장자 지정
 
+  # html 수정 시 자동 적용
+  devtools:
+    livereload:
+      enabled: true
+
   application:
     name: glass_time_studio
 

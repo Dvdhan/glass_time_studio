@@ -59,15 +59,6 @@ public class MemberController {
     }
     @GetMapping("/login")
     public void getLogin(HttpServletResponse response) throws IOException{
-        String state = UUID.randomUUID().toString();
-        String url = String.format("https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=%s&redirect_uri=%s&state=%s",
-                clientId,redirectUri, state);
-        System.out.println("클라아디: "+clientId);
-        System.out.println("시크릿: "+clientSecret);
-        System.out.println(redirectUri);
-        System.out.println(state);
-        System.out.println(url);
-
         String aa = "http://localhost:8080/oauth2/authorization/naver";
 //        response.sendRedirect(url);
         response.sendRedirect(aa);

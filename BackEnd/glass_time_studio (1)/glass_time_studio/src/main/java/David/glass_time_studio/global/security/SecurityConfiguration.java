@@ -59,12 +59,13 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new glassTimeStudioAuthenticationEntryPoint())
                         .accessDeniedHandler(new glassTimeStudioDeniedHandler())
                 )
-                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(HttpMethod.GET,"/member/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/main").permitAll()
-                        .requestMatchers("/WEB-INF/views/**/*.jsp").permitAll()
-                        .anyRequest().authenticated()
-                )
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+////                        .requestMatchers(HttpMethod.GET,"/member/login").permitAll()
+//                        .requestMatchers(HttpMethod.GET,"/main").permitAll()
+//                        .requestMatchers("/WEB-INF/views/**/*.jsp").permitAll()
+//                        .anyRequest().authenticated()
+//                )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2SuccessHandler(jwtTokenizer, authorityUtils, memberService, memberRepository))
                 );

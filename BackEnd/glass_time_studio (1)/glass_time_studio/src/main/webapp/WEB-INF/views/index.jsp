@@ -32,34 +32,30 @@
   </style>
 
   <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
-  <link rel="stylesheet" href="./css/background_black.css">
+  <link rel="stylesheet" href="/css/background_black.css">
 </head>
 
 <body>
   <div id="menu">
     <div id="logo">
-      <img src="./images/logo.png" alt="">
+      <img src="/images/logo.png" alt="">
       <h1 id="title" style="padding-left: 1em;">유리하는 시간 glass_time_studio</h1>
     </div>
     <ul>
-      <li><a href="./index.html">홈으로</a></li>
-      <li><a href="./layouts/announcement/event_announcement.html">이벤트/공지사항</a></li>
-      <li><a href="./layouts/class/class.html">클래스</a></li>
-      <li><a href="./layouts/product/product.html">제품 구매하기</a></li>
-      <li><a href="./layouts/review/review.html">수강생 후기</a></li>
+      <li><a href="/main">홈으로</a></li>
+      <li><a href="/announcement">이벤트/공지사항</a></li>
+      <li><a href="/class">클래스</a></li>
+      <li><a href="/product">제품 구매하기</a></li>
+      <li><a href="/review">수강생 후기</a></li>
     </ul>
   </div>
 
-
-
-
-
   <div id="slideshow">
     <div id="slide_1">
-      <img src="./images/glass_butterfly.jpg" alt="" id="img1">
+      <img src="/images/glass_butterfly.jpg" alt="" id="img1">
     </div>
     <div id="slide_2">
-      <img src="./images/glass_christmas_ornament.jpg" alt="" id="img2">
+      <img src="/images/glass_christmas_ornament.jpg" alt="" id="img2">
     </div>
   </div>
   <br><br>
@@ -81,18 +77,18 @@
 
   <script>
     const images = [
-      './images/glass_butterfly.jpg',
-      './images/glass_christmas_ornament.jpg',
-      './images/glass_christmas_star.jpg',
-      './images/glass_hot_air_balloon.jpg',
-      './images/glass_personal_color_mirror.jpg',
-      './images/glass_plant.png',
-      './images/glass_rose.jpg',
-      './images/glass_santa.jpg',
-      './images/glass_star.jpg',
-      './images/glass_sunflower.jpg',
-      './images/glass_whale_butterfly.jpg',
-      './images/glass_whale.jpg'
+      '/images/glass_butterfly.jpg',
+      '/images/glass_christmas_ornament.jpg',
+      '/images/glass_christmas_star.jpg',
+      '/images/glass_hot_air_balloon.jpg',
+      '/images/glass_personal_color_mirror.jpg',
+      '/images/glass_plant.png',
+      '/images/glass_rose.jpg',
+      '/images/glass_santa.jpg',
+      '/images/glass_star.jpg',
+      '/images/glass_sunflower.jpg',
+      '/images/glass_whale_butterfly.jpg',
+      '/images/glass_whale.jpg'
     ];
 
     let currentIndex = 0;
@@ -104,49 +100,6 @@
     }
     changeImage();
     setInterval(changeImage, 3000);
-
-
-
-    // 권한 체크하여 메뉴리스트 만들기
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // 폼 기본 제출 방지
-
-    const formData = {
-      username: document.getElementById('username').value,
-      password: document.getElementById('password').value
-    };
-
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      checkPermissions(data.permissions); // 사용자 권한 확인 함수 호출
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  });
-
-  function checkPermissions(permissions) {
-    // 예시 권한 확인 로직
-    if (permissions.includes('admin')) {
-      // 특정 권한이 있는 경우, 메뉴에 항목 추가
-      const menuList = document.querySelector('#menu ul');
-      const newMenuItem = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = '/admin';
-      link.textContent = '관리자 페이지';
-      newMenuItem.appendChild(link);
-      menuList.appendChild(newMenuItem);
-    }
-  }
-
   </script>
 </body>
 </html>
