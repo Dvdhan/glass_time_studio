@@ -12,8 +12,8 @@ public class MemberMapperImpl {
     public MemberDto.MyPage memberToMyPage(Member member){
         MemberDto.MyPage myPage = new MemberDto.MyPage();
 
-        myPage.setMember_Id(member.getMember_Id());
-        myPage.setMember_Name(member.getMember_Name());
+        myPage.setMemberId(member.getMemberId());
+        myPage.setMemberName(member.getMemberName());
         myPage.setEmail(member.getEmail());
         return myPage;
     }

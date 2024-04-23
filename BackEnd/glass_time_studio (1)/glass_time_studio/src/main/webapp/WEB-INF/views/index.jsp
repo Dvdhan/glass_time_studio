@@ -29,6 +29,11 @@
       margin: auto;
       width: 35em;
     }
+    .naver_login{
+      background-color: black;
+      border: 1px solid white;
+      padding: 0.3em;
+    }
   </style>
 
   <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
@@ -68,12 +73,8 @@
   </div>
 <br>
   <div style="margin: auto; text-align: center; width: 10em;">
-    <button>
-      <a href="/member/login">네이버 로그인</a>
-    </button>
+      <a href="/member/login" class="naver_login">네이버 로그인</a>
   </div>
-  
-
 
   <script>
     const images = [

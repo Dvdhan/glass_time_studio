@@ -19,9 +19,9 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long member_Id;
+    private Long memberId;
     @Column
-    private String member_Name;
+    private String memberName;
     @Column
     private String email;
     @Column
@@ -39,8 +39,8 @@ public class Member {
     public Member(String email) {
         this.email = email;
     }
-    public Member (String email, String member_Name) {
+    public Member (String email, String memberName) {
         this.email = email;
-        this.member_Name = member_Name;
+        this.memberName = memberName;
     }
 }

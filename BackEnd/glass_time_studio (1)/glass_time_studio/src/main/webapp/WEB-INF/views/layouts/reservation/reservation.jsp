@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="../../css/background_black.css">
+  <link rel="stylesheet" href="/css/background_black.css">
 
   <style>
     fieldset{
@@ -60,7 +60,7 @@
 
       <div id="class_type">
         <div class="head">
-          클래스 종류 : 
+          클래스 종류
         </div>
 
         <div class="body">
@@ -74,7 +74,7 @@
 
       <div id="class_date">
         <div class="head">
-          요청 날짜 :
+          요청 날짜
         </div>
 
         <div class="body">
@@ -84,7 +84,7 @@
 
       <div id="class_time">
         <div class="head">
-          요청 시간 :
+          요청 시간
         </div>
 
         <div class="body">
@@ -98,7 +98,7 @@
 
       <div id="class_ppl">
         <div class="head">
-          참여 인원 : 
+          참여 인원
         </div>
 
         <div class="body">
@@ -108,7 +108,7 @@
 
       <div id="class_phone">
         <div class="head">
-          휴대폰 번호 :
+          휴대폰 번호
         </div>
         
         <div class="body">
@@ -118,7 +118,7 @@
 
       <div id="class_message">
         <div class="head">
-          메세지 : 
+          메세지
         </div>
 
         <div class="body">
@@ -144,10 +144,16 @@
       let classMessage = document.querySelector('#rsvn_message').value;
       let class_phone = document.querySelector('#rsvn_ppl_ph').value;
 
+      let today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let selectedDate = new Date(classDate);
+      selectedDate.setHours(0, 0, 0, 0);
+
+
       if(classType === "none"){
         alert('클래스 종류를 선택해주세요');
-      }else if(!classDate){
-        alert('요청 날짜를 선택해주세요');
+      }else if(!classDate || selectedDate < today){
+        alert('유효한 요청 날짜를 선택해주세요(오늘 이후의 날짜)');
       }else if(classTime ==="none"){
         alert('요청 시간을 선택해주세요');
       }else if(!pplNum){
@@ -161,7 +167,7 @@
       }else {
         alert('예약 요청이 완료되었습니다.\n일정 확인 후 연락드리겠습니다.');
         document.getElementById('reservation_form').submit();
-        window.location.href = "../../index.html";
+        window.location.href = "/main";
       }
     }
   </script>

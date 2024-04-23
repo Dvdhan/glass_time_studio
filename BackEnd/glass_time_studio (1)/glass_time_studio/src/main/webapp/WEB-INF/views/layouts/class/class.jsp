@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Class</title>
-  <link rel="stylesheet" href="../../css/background_black.css">
+  <link rel="stylesheet" href="/css/background_black.css">
   
   <style>
     #introduce{
