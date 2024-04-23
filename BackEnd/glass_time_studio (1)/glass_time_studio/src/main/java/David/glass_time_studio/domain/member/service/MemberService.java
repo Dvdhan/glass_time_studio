@@ -18,8 +18,8 @@ public class MemberService {
     }
 
     public Member createMember(Member member){
-        Member newMember = memberRepository.save(member);
-        return newMember;
+        Member createdMember = memberRepository.save(member);
+        return createdMember;
     }
     public Member findMemberById (long memberId) {
         Member findMember = memberRepository.findById(memberId);

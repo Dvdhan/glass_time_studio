@@ -8,23 +8,23 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Patch{
-        private long member_Id;
-        private String member_Name;
+        private long memberId;
+        private String memberName;
         private String email;
     }
     @Getter
     @Setter
     public static class Response{
-        private long member_Id;
-        private String member_Name;
+        private long memberId;
+        private String memberName;
         private String email;
     }
 
     @Getter
     @Setter
     public static class MyPage{
-        private long member_Id;
-        private String member_Name;
+        private long memberId;
+        private String memberName;
         private String email;
     }
 }

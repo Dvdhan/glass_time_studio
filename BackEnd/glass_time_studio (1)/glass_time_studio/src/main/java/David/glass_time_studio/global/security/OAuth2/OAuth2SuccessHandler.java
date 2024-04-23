@@ -66,7 +66,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 찾아지는 객체가 없다면, 새로 생성 후 name, oauthType 할당.
         if(foundMember == null){
             Member member = new Member(email);
-            member.setMember_Name(name);
+            member.setMemberName(name);
             member.setOauthType(registrationId);
             member.setPermit(authorities);
             member.setMobile(mobile);
@@ -77,8 +77,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 찾아지는 멤버가 있다면, name 할당 후 DB 저장
         else {
             int updated = 0;
-            if(foundMember.getMember_Name() != name){
-                foundMember.setMember_Name(name);
+            if(foundMember.getMemberName() != name){
+                foundMember.setMemberName(name);
                 updated+=1;
             }
             if(foundMember.getOauthType() != registrationId){
@@ -130,7 +130,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("response: "+response);
 
         // 사용자에게 makeRedirectUrl 메서드를 활용하여 endpoint + accessToken + RefreshToken 보냄.
-        String redirectUrl = "/main";
+        String redirectUrl = "/mypage";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
     private String delegateAccessToken(Member member, List<String> authorities){
@@ -138,12 +138,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Map<String, Object> claims = new HashMap<>();
 
         // Object 자리인 Value를 Long 타입인 member_Id를 담기위해 String 으로 감싸서 지정
-        claims.put("member_Id", String.valueOf(member.getMember_Id()));
-        claims.put("member_Name", member.getMember_Name());
+        claims.put("member_Id", String.valueOf(member.getMemberId()));
+        claims.put("member_Name", member.getMemberName());
         claims.put("roles", authorities);
 
         // member_Id를 String 형태인 subject에 할당.
-        String subject = String.valueOf(member.getMember_Id());
+        String subject = String.valueOf(member.getMemberId());
 
         // accessToken의 유효기간을 yml로부터 가져와 Date 객체에 할당.
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());

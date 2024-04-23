@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="/css/background_black.css">
 
   <style>
+    .head_text{
+      font-size: 0.8em;
+    }
     fieldset{
       position: relative;
       margin: auto;
@@ -84,38 +87,38 @@
 
       <tbody>
         <tr>
-          <td>① 고객님 주문</td>
-          <td>고객님께서 원하시는 제품을 구매(결제)합니다.</td>
+          <td class="head_text">① 고객님 주문</td>
+          <td class="head_text">고객님께서 원하시는 제품을 구매(결제)합니다.</td>
           <td>가능</td>
         </tr>
 
         <tr>
-          <td>② 주문서 확인</td>
-          <td>유리하는 시간에서 주문 의뢰가 들어온 내용을 확인합니다.</td>
+          <td class="head_text">② 주문서 확인</td>
+          <td class="head_text">유리하는 시간에서 주문 의뢰가 들어온 내용을 확인합니다.</td>
           <td>가능</td>
         </tr>
 
         <tr>
-          <td>③ 확인 연락</td>
-          <td>요구사항, 변경요청, 제작소요기간을 계산하여 유리하는 시간에서 고객님께 연락을 드립니다.</td>
+          <td class="head_text">③ 확인 연락</td>
+          <td class="head_text">요구사항, 변경요청, 제작소요기간을 계산하여 유리하는 시간에서 고객님께 연락을 드립니다.</td>
           <td>가능</td>
         </tr>
 
         <tr>
-          <td>④ 제작</td>
-          <td>제작이 진행됩니다. (난이도에 따라 최대 2주까지 소요될 수 있습니다.)</td>
+          <td class="head_text">④ 제작</td>
+          <td class="head_text">제작이 진행됩니다. (난이도에 따라 최대 2주까지 소요될 수 있습니다.)</td>
           <td>*불가능</td>
         </tr>
 
         <tr>
-          <td>⑤ 배송</td>
-          <td>제작이 완료되면 당일 또는 익일에 배송 접수를 합니다.</td>
+          <td class="head_text">⑤ 배송</td>
+          <td class="head_text">제작이 완료되면 당일 또는 익일에 배송 접수를 합니다.</td>
           <td>*불가능</td>
         </tr>
 
         <tr>
-          <td>⑥ 피드백</td>
-          <td>고객님의 만족도 및 피드백, 개선사항을 체크하기 위해 유리하는 시간에서 고객님께 연락을 드립니다.</td>
+          <td class="head_text">⑥ 피드백</td>
+          <td class="head_text">고객님의 만족도 및 피드백, 개선사항을 체크하기 위해 유리하는 시간에서 고객님께 연락을 드립니다.</td>
           <td>*불량 및 파손 시, 가능</td>
         </tr>
       </tbody>
