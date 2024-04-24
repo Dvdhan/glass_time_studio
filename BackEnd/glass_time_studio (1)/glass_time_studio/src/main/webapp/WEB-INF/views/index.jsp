@@ -29,7 +29,7 @@
       margin: auto;
       width: 35em;
     }
-    .naver_login{
+    #naver_login{
       background-color: black;
       border: 1px solid white;
       padding: 0.3em;
@@ -37,23 +37,10 @@
   </style>
 
   <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
-  <link rel="stylesheet" href="/css/background_black.css">
 </head>
 
 <body>
-  <div id="menu">
-    <div id="logo">
-      <img src="/images/logo.png" alt="">
-      <h1 id="title" style="padding-left: 1em;">유리하는 시간 glass_time_studio</h1>
-    </div>
-    <ul>
-      <li><a href="/main">홈으로</a></li>
-      <li><a href="/announcement">이벤트/공지사항</a></li>
-      <li><a href="/class">클래스</a></li>
-      <li><a href="/product">제품 구매하기</a></li>
-      <li><a href="/review">수강생 후기</a></li>
-    </ul>
-  </div>
+  <%@ include file="navigation.jsp" %>
 
   <div id="slideshow">
     <div id="slide_1">
@@ -72,9 +59,11 @@
     </fieldset>
   </div>
 <br>
-  <div style="margin: auto; text-align: center; width: 10em;">
-      <a href="/member/login" class="naver_login">네이버 로그인</a>
-  </div>
+  <% if (request.getAttribute("isLoggedIn") == null || !(Boolean) request.getAttribute("isLoggedIn")) { %>
+      <div style="margin: auto; text-align: center; width: 10em;">
+          <a href="/member/login" id="naver_login">네이버 로그인</a>
+      </div>
+  <% } %>
 
   <script>
     const images = [

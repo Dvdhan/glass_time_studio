@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -59,16 +60,15 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new glassTimeStudioAuthenticationEntryPoint())
                         .accessDeniedHandler(new glassTimeStudioDeniedHandler())
                 )
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-////                        .requestMatchers(HttpMethod.GET,"/member/login").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"/main").permitAll()
-//                        .requestMatchers("/WEB-INF/views/**/*.jsp").permitAll()
-//                        .anyRequest().authenticated()
-//                )
+                .authorizeHttpRequests((authorizeHttpRequests)->authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new OAuth2SuccessHandler(jwtTokenizer, authorityUtils, memberService, memberRepository))
-                );
+                )
+                .logout((logout)->logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                        .logoutSuccessUrl("/main")
+                        .invalidateHttpSession(true));
         return http.build();
     }
     // CORS 설정 메서드

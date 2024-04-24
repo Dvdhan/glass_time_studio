@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Class</title>
-  <link rel="stylesheet" href="/css/background_black.css">
+
   
   <style>
     #introduce{
@@ -60,6 +60,7 @@
       margin: auto;
       border-collapse: collapse;
       width: 30em;
+      text-align: center;
     }
     th, td{
       border: 1px solid white;
@@ -77,19 +78,7 @@
   </style>
 </head>
 <body>
-  <div id="menu">
-    <div id="logo">
-      <img src="../../images/logo.png" alt="">
-      <h1 id="title" style="padding-left: 1em;">유리하는 시간 glass_time_studio</h1>
-    </div>
-    <ul>
-      <li><a href="/main">홈으로</a></li>
-      <li><a href="/announcement">이벤트/공지사항</a></li>
-      <li><a href="/class">클래스</a></li>
-      <li><a href="/product">제품 구매하기</a></li>
-      <li><a href="/review">수강생 후기</a></li>
-    </ul>
-  </div>
+  <%@ include file="../../navigation.jsp" %>
 
   <div style="text-align: center;">
     <div id="notice">
