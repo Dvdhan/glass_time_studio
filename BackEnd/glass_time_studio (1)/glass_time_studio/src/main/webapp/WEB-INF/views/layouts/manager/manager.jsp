@@ -31,19 +31,7 @@
 </head>
 
 <body>
-  <div id="menu">
-    <div id="logo">
-      <img src="./images/logo.png" alt="">
-      <h1 id="title" style="padding-left: 1em;">유리하는 시간 glass_time_studio</h1>
-    </div>
-    <ul>
-      <li><a href="../../index.html">홈으로</a></li>
-      <li><a href="../../layouts/announcement/event_announcement.html">이벤트/공지사항</a></li>
-      <li><a href="../../layouts/class/class.html">클래스</a></li>
-      <li><a href="../../layouts/product/product.html">제품 구매하기</a></li>
-      <li><a href="../../layouts/review/review.html">수강생 후기</a></li>
-    </ul>
-  </div>
+  <%@ include file="../../navigation.jsp" %>
 
   <div id="container">
     <fieldset>

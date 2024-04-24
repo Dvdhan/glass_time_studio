@@ -37,6 +37,9 @@ dependencies {
 	// jsp 추가
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'javax.servlet:jstl:1.2'
+//	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:1.2.7'
+//	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:1.2.7'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'

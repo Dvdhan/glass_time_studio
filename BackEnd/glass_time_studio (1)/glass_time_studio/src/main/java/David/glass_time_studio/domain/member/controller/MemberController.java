@@ -59,7 +59,6 @@ public class MemberController {
     @GetMapping("/login")
     public void getLogin(HttpServletResponse response) throws IOException{
         String aa = "http://localhost:8080/oauth2/authorization/naver";
-//        response.sendRedirect(url);
         response.sendRedirect(aa);
     }
     @PostMapping("/update")

@@ -3,7 +3,9 @@ package David.glass_time_studio.view.controller;
 import David.glass_time_studio.domain.member.entity.Member;
 import David.glass_time_studio.domain.member.repository.MemberRepository;
 import David.glass_time_studio.domain.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -26,31 +28,52 @@ public class MyController {
     }
 
     @GetMapping("/main")
-    public String index(Model model){
+    public String index(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "index";
     }
     @GetMapping("/announcement")
-    public String evenAnnouncement(){
+    public String evenAnnouncement(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/announcement/event_announcement";
     }
     @GetMapping("/class")
-    public String load_class(){
+    public String load_class(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/class/class";
     }
     @GetMapping("/product")
-    public String to_product(){
+    public String to_product(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/product/product";
     }
     @GetMapping("/review")
-    public String to_review(){
+    public String to_review(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/review/review";
     }
     @GetMapping("/reservation")
-    public String to_reservation(){
+    public String to_reservation(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/reservation/reservation";
     }
     @GetMapping("/product_detail")
-    public String product_detail(){
+    public String product_detail(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/product/product_detail";
     }
     @GetMapping("/mypage")
@@ -63,6 +86,9 @@ public class MyController {
         String name = String.valueOf(responseAttributes.get("name"));
         String mobile = String.valueOf(responseAttributes.get("mobile"));
         String birthday = String.valueOf(responseAttributes.get("birthday"));
+
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
 
         log.info("MyController-이름: "+name);
         log.info("MyController-이메일: "+email);
@@ -83,7 +109,11 @@ public class MyController {
         return "layouts/login/myPage";
     }
     @GetMapping("/updateInfo")
-    public String update_Info(){
+    public String update_Info(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "layouts/login/updateInfo";
     }
+
 }
