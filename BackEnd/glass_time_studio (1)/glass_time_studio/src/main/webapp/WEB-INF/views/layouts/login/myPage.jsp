@@ -29,7 +29,6 @@
         <p>이메일: ${member.getEmail()}</p>
         <p>휴대폰 번호: ${member.getMobile()}</p>
         <p>생일: ${member.getBirthday()}</p>
-        <p>아이디: ${member.getMemberId()}</p>
         <input type="hidden" name="memberId" id="memberId" value="${member.getMemberId()}">
         <div style="text-align: right;">
           <a id="button" href="/updateInfo?name=${member.getMemberName()}&email=${member.getEmail()}&mobile=${member.getMobile()}&birthday=${member.getBirthday()}&memberId=${member.getMemberId()}">수정하기</a>

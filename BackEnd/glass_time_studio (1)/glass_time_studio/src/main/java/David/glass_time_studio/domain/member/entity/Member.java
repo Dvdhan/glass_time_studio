@@ -34,7 +34,9 @@ public class Member {
     private String oauthType;
     @Column
     @ElementCollection
-    private List<String> permit = new ArrayList<>();
+    private List<String> authorities = new ArrayList<>();
+    @Column
+    private String permit;
 
     public Member(String email) {
         this.email = email;

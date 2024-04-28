@@ -206,14 +206,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         // 요청자를 구분하여 resource에 접근하려는 주체를 구분할 수 있다. + Request URL의 간단함.
 
         // 토큰의 claims(payload)에서 email을 가져온다.
-        String member_Id = (String) claims.get("memberId");
+        String memberId = (String) claims.get("memberId");
 //        String email = (String) claims.get("email");
         // 토큰의 claims(payload)에서 role을 가져와서 createAuthorities 메서드를 통해 권한을 생성
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
 
         // Principal : memberId, password : null, role을 가져와 생성한 authorities로 Authentication 객체 생성.
 //        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(member_Id, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberId, null, authorities);
         // SecurityContextHolder 에서 보관하는 Context로써 새로 생성한 authenticaiton 객체를 저장함.
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

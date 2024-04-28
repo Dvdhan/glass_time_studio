@@ -20,12 +20,18 @@
             <p>이메일: <input type="email" name="email" id="email" value="${param.email}"></p>
             <p>휴대폰 번호: <input type="text" name="mobile" id="mobile" value="${param.mobile}"></p>
             <p>생일: ${param.birthday}</p>
-            <p>아이디: ${param.memberId}</p>
             <input type="hidden" name="memberId" id="memberId" value="${param.memberId}">
             <div style="text-align: right;">
-              <button type="submit">저장하기</button>
+              <button type="submit" onClick="alertMessage();">저장하기</button>
             </div>
         </fieldset>
     </form>
+
+
+    <script>
+        function alertMessage() {
+            alert("변경사항을 적용하였습니다.");
+        }
+    </script>
 </body>
 </html>

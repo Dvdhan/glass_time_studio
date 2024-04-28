@@ -28,8 +28,8 @@ import java.util.Map;
 @Slf4j
 public class AnnouncementController {
 
-    private AnnouncementService announcementService;
-    private AnnouncementMapper announcementMapper;
+    private final AnnouncementService announcementService;
+    private final AnnouncementMapper announcementMapper;
 
     public AnnouncementController(AnnouncementService announcementService, AnnouncementMapper announcementMapper){
         this.announcementService=announcementService;
