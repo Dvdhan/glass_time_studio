@@ -9,14 +9,14 @@
   <style>
     #introduce{
       display: grid;
-      grid-template-columns: 21em 20em;
-      width: 93%;
+      grid-template-columns: 15em 15em;
       grid-template-areas: 
       "one_day hobby";
       margin: auto;
       column-gap: 1em;
       margin-top: 2em;
       justify-content: center;
+
     }
     #one_day{
       grid-area: one_day;
@@ -24,7 +24,7 @@
     }
     #hobby{
       grid-area: hobby;
-      border: 1px solid white;      
+      border: 1px solid white;
     }
     #btns{
       display: grid;
@@ -53,8 +53,8 @@
       border: 1px solid white;
     }
     p{
-      text-align: center;
-      padding-left: 10px;
+      text-align: left;
+      padding-left: 1em;
     }
     table{
       margin: auto;
@@ -72,9 +72,7 @@
       border-right: 1px solid white;
       border-left : 1px solid white;
     }
-    #diff tbody{
-      padding: 5px;
-    }
+
   </style>
 </head>
 <body>
@@ -208,14 +206,22 @@
     <div id="introduce">
       <div id="one_day">
         <h2>1. 원데이 클래스(Oneday class)</h2>
-        <p>- 샘플 작품 중 원하는 작품을 선택하여 도안대로 만들어 보는 시간입니다.</p>
-        <p>- 샘플 도안에서 '일부' 모양이나 조각 수는 변경하셔도 됩니다.</p>
+        <p>- 샘플 작품 중 원하는 작품을 선택하여<br>
+          <span style="padding-left: 0.8em;">도안대로 만들어 보는 시간입니다.</span>
+        </p>
+        <p>- 샘플 도안에서 '일부' 모양이나 조각 수는<br>
+          <span style="padding-left: 0.8em;">변경하셔도 됩니다.</span>
+        </p>
       </div>
 
       <div id="hobby">
         <h2>2. 하비 클래스(hobby class)</h2>
-        <p>- 수강생님이 원하는 도안으로 나만의 작품을 만들어 보는 시간입니다.</p>
-        <p>- 취미반 커리큘럼에 맞춰진 주차별 프로그램 기준으로 진행됩니다.</p>
+        <p>- 수강생님이 원하는 도안으로<br>
+          <span style="padding-left: 0.8em;">나만의 작품을 만들어 보는 시간입니다.</span>
+        </p>
+        <p>- 취미반 커리큘럼에 맞춰진 <br>
+          <span style="padding-left: 0.8em;">주차별 프로그램 기준으로 진행됩니다.</span>
+        </p>
       </div>
     </div>
 

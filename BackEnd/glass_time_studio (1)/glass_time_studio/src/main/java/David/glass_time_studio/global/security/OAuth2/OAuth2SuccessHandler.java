@@ -59,6 +59,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // email을 토대로 Role을 생성
         List<String> authorities = authorityUtils.createRoles(email);
         log.info("Role: "+authorities);
+        String permit = authorityUtils.createPermit(email);
+        log.info("성공이후 생성되는 permit: "+permit);
 
         // email을 토대로 DB에서 member 찾음.
         Member foundMember = memberRepository.findMemberByEmail(email);
@@ -68,7 +70,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             Member member = new Member(email);
             member.setMemberName(name);
             member.setOauthType(registrationId);
-            member.setPermit(authorities);
+//            member.setPermit(authorities);
+            member.setPermit(permit);
             member.setMobile(mobile);
             member.setBirthday(birthday);
             member.setAge(age);
@@ -104,6 +107,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // DB에서 조회된 회원 객체와 email을 기준으로 생성한 권한을 부여하여 accessToken 생성.
         String accessToken = delegateAccessToken(foundMember, authorities);
+//        String accessToken = delegateAccessToken(foundMember, permit);
         log.info("엑세스 토큰 생성 :"+accessToken);
 
         // 회원의 name을 할당하여 RefreshToken을 생성함.
@@ -134,13 +138,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
     private String delegateAccessToken(Member member, List<String> authorities){
+
         // Token 에서 확인되는 payload를 보관하기 위한 claims 생성
         Map<String, Object> claims = new HashMap<>();
 
         // Object 자리인 Value를 Long 타입인 member_Id를 담기위해 String 으로 감싸서 지정
-        claims.put("member_Id", String.valueOf(member.getMemberId()));
-        claims.put("member_Name", member.getMemberName());
-        claims.put("roles", authorities);
+        claims.put("memberId", String.valueOf(member.getMemberId()));
+        claims.put("memberName", member.getMemberName());
+//        claims.put("roles", authorities);
+        claims.put("authorities", authorities);
 
         // member_Id를 String 형태인 subject에 할당.
         String subject = String.valueOf(member.getMemberId());
@@ -162,6 +168,37 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throw new RuntimeException("AccessToken 생성 중 오류", e);
         }
     }
+//    private String delegateAccessToken(Member member, String permit){
+//
+//        // Token 에서 확인되는 payload를 보관하기 위한 claims 생성
+//        Map<String, Object> claims = new HashMap<>();
+//
+//        // Object 자리인 Value를 Long 타입인 member_Id를 담기위해 String 으로 감싸서 지정
+//        claims.put("memberId", String.valueOf(member.getMemberId()));
+//        claims.put("memberName", member.getMemberName());
+//    //        claims.put("roles", authorities);
+//        claims.put("authorities", permit);
+//
+//        // member_Id를 String 형태인 subject에 할당.
+//        String subject = String.valueOf(member.getMemberId());
+//
+//        // accessToken의 유효기간을 yml로부터 가져와 Date 객체에 할당.
+//        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+//
+//        // secretKey를 Base64 형식으로 인코딩하여 String 객체에 할당
+//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+//
+//        // 위에 정의한 claims, subject(member_Id), expiration, key를 전달하여 AccessKey 생성.
+//        try{
+//            String accessToken = jwtTokenizer.generateAccessToken(
+//                    claims, subject, expiration, base64EncodedSecretKey);
+//            log.info("호출6");
+//            return accessToken;
+//        } catch (Exception e){
+//            log.error("AccessToken 생성 중 오류 발생", e);
+//            throw new RuntimeException("AccessToken 생성 중 오류", e);
+//        }
+//    }
     private String delegateRefreshToken(String userName){
         // 파라미터로 주어진 username을 subject로 할당
         String subject = userName;

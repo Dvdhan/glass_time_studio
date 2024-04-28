@@ -3,7 +3,9 @@ package David.glass_time_studio.view.controller;
 import David.glass_time_studio.domain.member.entity.Member;
 import David.glass_time_studio.domain.member.repository.MemberRepository;
 import David.glass_time_studio.domain.member.service.MemberService;
+
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +24,12 @@ public class MyController {
     private MemberRepository memberRepository;
     private MemberService memberService;
 
-    public MyController(MemberRepository memberRepository, MemberService memberService){
+
+    public MyController(MemberRepository memberRepository,
+                        MemberService memberService){
         this.memberRepository = memberRepository;
         this.memberService = memberService;
+
     }
 
     @GetMapping("/main")
@@ -35,10 +40,28 @@ public class MyController {
         return "index";
     }
     @GetMapping("/announcement")
-    public String evenAnnouncement(Model model, HttpServletRequest request){
+    public String eventAnnouncement(Model model, HttpServletRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
+
+        if(authentication.getPrincipal() instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> responseAttributes = (Map<String, Object>) attributes.get("response");
+            String email = String.valueOf(responseAttributes.get("email"));
+            Member member = memberRepository.findMemberByEmail(email);
+            if(member != null){
+                model.addAttribute("member", member);
+
+                boolean isAdmin = "ADMIN".equals(member.getPermit());
+                model.addAttribute("isAdmin", isAdmin);
+            }else {
+                model.addAttribute("member",null);
+            }
+        }else {
+            System.out.println("Pricipal Type: "+authentication.getPrincipal().getClass());
+        }
         return "layouts/announcement/event_announcement";
     }
     @GetMapping("/class")
