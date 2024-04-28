@@ -39,6 +39,15 @@ public class MyController {
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "index";
     }
+
+    @GetMapping("/announcement/write")
+    public String write_annoucement(Model model, HttpServletRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+        return "layouts/announcement/write";
+    }
     @GetMapping("/announcement")
     public String eventAnnouncement(Model model, HttpServletRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

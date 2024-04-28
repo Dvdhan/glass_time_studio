@@ -43,7 +43,7 @@
 
     <% if(request.getAttribute("member") != null && (Boolean) request.getAttribute("isAdmin")) { %>
       <div id="announcement_btns">
-          <a href="" id="add">공지사항 작성하기</a>
+          <a href="/announcement/write" id="add">공지사항 작성하기</a>
           <a href="" id="edit">공지사항 수정하기</a>
           <a href="" id="delete">공지사항 삭제하기</a>
       </div>
