@@ -55,7 +55,7 @@
         </div>
 
         <div id="btns">
-            <a href="/announcement/update" id="update">수정하기</a>
+            <a id="update" onclick="updateAnnouncement()">수정하기</a>
             <a id="delete" onclick="deleteAnnouncement()">삭제하기</a>
         </div>
 
@@ -73,6 +73,12 @@ document.getElementById('created_at').innerText = '[작성일]: ' + createdAt;
 document.getElementById('modified_at').innerText = '[수정일]: ' + modifiedAt;
 
 
+
+
+function updateAnnouncement(){
+    var announcement_Id = "${announcement.announcement_Id}";
+
+}
 
 function deleteAnnouncement(){
     var announcement_Id = "${announcement.announcement_Id}";
@@ -97,8 +103,7 @@ function deleteAnnouncement(){
         });
     }
 }
-function update(){
-}
+
 
 
 </script>
