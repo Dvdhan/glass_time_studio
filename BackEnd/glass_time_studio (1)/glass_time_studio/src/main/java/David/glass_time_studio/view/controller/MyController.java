@@ -1,10 +1,15 @@
 package David.glass_time_studio.view.controller;
 
+import David.glass_time_studio.domain.announcement.dto.AnnouncementDto;
+import David.glass_time_studio.domain.announcement.entity.Announcement;
+import David.glass_time_studio.domain.announcement.mapper.AnnouncementMapper;
+import David.glass_time_studio.domain.announcement.service.AnnouncementService;
 import David.glass_time_studio.domain.member.entity.Member;
 import David.glass_time_studio.domain.member.repository.MemberRepository;
 import David.glass_time_studio.domain.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -14,6 +19,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
@@ -23,13 +29,30 @@ public class MyController {
 
     private MemberRepository memberRepository;
     private MemberService memberService;
+    private AnnouncementService announcementService;
+    private AnnouncementMapper announcementMapper;
 
 
     public MyController(MemberRepository memberRepository,
-                        MemberService memberService){
+                        MemberService memberService,
+                        AnnouncementService announcementService,
+                        AnnouncementMapper announcementMapper){
         this.memberRepository = memberRepository;
         this.memberService = memberService;
+        this.announcementService =announcementService;
+        this.announcementMapper=announcementMapper;
 
+    }
+
+    @GetMapping("/Announcement/{announcement_Id}")
+    public String findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id,
+                                   Model model){
+        Announcement announcement = announcementService.findAnnouncement(announcement_id);
+        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(announcement);
+
+        model.addAttribute("announcement", response);
+
+        return "layouts/announcement/detail";
     }
 
     @GetMapping("/main")

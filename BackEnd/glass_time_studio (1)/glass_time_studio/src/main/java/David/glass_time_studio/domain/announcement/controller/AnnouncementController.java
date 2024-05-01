@@ -9,12 +9,14 @@ import David.glass_time_studio.domain.page.PageInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.asm.IModelFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,12 +60,23 @@ public class AnnouncementController {
 
     }
     // 공지사항 단일 조회
-    @GetMapping("/{announcement_Id}")
-    public ResponseEntity findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id){
-        Announcement announcement = announcementService.findAnnouncement(announcement_id);
-        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(announcement);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+//    @GetMapping("/{announcement_Id}")
+//    public ResponseEntity findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id){
+//        Announcement announcement = announcementService.findAnnouncement(announcement_id);
+//        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(announcement);
+//
+//        return new ResponseEntity(response, HttpStatus.OK);
+//    }
+//    @GetMapping("/{announcement_Id}")
+//    public String findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id,
+//                                           Model model){
+//        Announcement announcement = announcementService.findAnnouncement(announcement_id);
+//        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(announcement);
+//
+//        model.addAttribute("announcement", response);
+//
+//        return "layouts/announcement/detail";
+//    }
     // 공지사항 전체 조회
     @GetMapping("/all")
     public ResponseEntity findAllAnnouncement(@Positive @RequestParam int page,
@@ -88,7 +101,7 @@ public class AnnouncementController {
         announcementService.deleteAnnouncement(announcement);
 
         Map<String, String> responseMessage = new HashMap<>();
-        responseMessage.put("message", "요청하신 '"+announcement.getAnnouncement_Title()+"' 삭제가 완료되었습니다.");
+        responseMessage.put("message", "요청하신 '"+announcement.getAnnouncement_Id()+"'번 공지글 삭제가 완료되었습니다.");
         return ResponseEntity.ok(responseMessage);
     }
 }
