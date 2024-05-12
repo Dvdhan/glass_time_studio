@@ -54,31 +54,26 @@
             </p>
         </div>
 
-        <div id="btns">
-            <a id="update" onclick="updateAnnouncement()">수정하기</a>
-            <a id="delete" onclick="deleteAnnouncement()">삭제하기</a>
-        </div>
+        <% if(request.getAttribute("member") != null && (Boolean) request.getAttribute("isAdmin")) { %>
+            <div id="btns">
+                <a id="update" href="/updateAnnouncement?id=${announcement.getAnnouncement_Id()}&title=${announcement.getAnnouncement_Title()}&body=${announcement.getAnnouncement_Content()}">수정하기</a>
+                <a id="delete" onclick="deleteAnnouncement()">삭제하기</a>
+            </div>
+        <% } %>
 
     </fieldset>
 </div>
 
 <script>
+
 var created_at_str = "${announcement.created_at}";
 var modified_at_str = "${announcement.modified_at}";
 
 var createdAt = new Date(created_at_str).toLocaleString();
 var modifiedAt = new Date(modified_at_str).toLocaleString();
 
-document.getElementById('created_at').innerText = '[작성일]: ' + createdAt;
-document.getElementById('modified_at').innerText = '[수정일]: ' + modifiedAt;
-
-
-
-
-function updateAnnouncement(){
-    var announcement_Id = "${announcement.announcement_Id}";
-
-}
+document.getElementById('created_at').innerText = '[' + createdAt + ']';
+document.getElementById('modified_at').innerText = '[' + modifiedAt + ']';
 
 function deleteAnnouncement(){
     var announcement_Id = "${announcement.announcement_Id}";

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,10 @@ public class AnnouncementService {
         Optional<Announcement> findAnnouncement = announcementRepository.findById(announcement_Id);
         Announcement foundAnnouncement = findAnnouncement.orElseThrow(()->new BusinessLogicException(ExceptionCode.ANNOUNCEMENT_NOT_FOUND));
         return foundAnnouncement;
+    }
+
+    public List<Announcement> searchAnnouncementsByTitle(String keyword){
+        return announcementRepository.searchAnnouncement("%" + keyword + "%");
     }
 
     public Page<Announcement> findAllAnnouncement(int page, int size){

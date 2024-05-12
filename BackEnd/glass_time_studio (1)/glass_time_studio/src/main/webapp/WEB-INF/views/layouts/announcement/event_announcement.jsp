@@ -30,10 +30,13 @@
     #cont_table{
       margin: auto;
       text-align: center;
-      width: 28em;
+      width: 30em;
+      border: 1px solid white;
+      border-collapse: collapse;
     }
     #cont_table td{
       text-align: center;
+      border: 1px solid white;
     }
     #announcement_btn_reverse{
       width: 33em;
@@ -58,6 +61,10 @@
       <div id="cont">
         <table id="cont_table">
         </table>
+      </div>
+      <div id="search_area" style="margin-top: 1em;">
+      <input type="text" id="keyword" name="keyword">
+      <button onClick="search_keyword();">검색하기</button>
       </div>
 
       <div id="announcement_btn_reverse">
@@ -86,20 +93,22 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log("응답:", data); // 데이터 확인을 위한 로그
       const announcements = data.data;
       const table = document.querySelector("#cont_table");
-      let rows = '';
+      let rows = "<tr><td>[공지번호]</td><td>[이벤트/공지제목]</td><td>[작성일]</td><td>[수정일]</td></tr>";
       if(announcements.length <= 0) {
         table.innerHTML = "<tr><td>작성된 이벤트/공지사항이 없습니다.</td></tr>";
       } else{
       announcements.forEach(announcement => {
         const createdAt = new Date(announcement.created_at).toLocaleString();
+        const modifiedAt = new Date(announcement.modified_at).toLocaleString();
         console.log("공지번호: ", announcement.announcement_Id);
         console.log("공지제목: ", announcement.announcement_Title);
         console.log("작성일: ", createdAt);
         rows +=
           "<tr>"+
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[공지번호]: " + announcement.announcement_Id + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[이벤트/공지 제목]: " + announcement.announcement_Title + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[작성일]: " + createdAt + "</a></td>"+
+          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>" + announcement.announcement_Id + "</a></td>" +
+          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>" + announcement.announcement_Title + "</a></td>" +
+          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>" + createdAt + "</a></td>"+
+          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>" + modifiedAt + "</a></td>"+
           "</tr>";
           console.log("rows: ", rows);
         });
@@ -110,6 +119,57 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('Error loading the announcements:', error);
     });
 });
+
+function search_keyword(){
+    let keyword = document.getElementById('keyword').value;
+    console.log("검색어 ", keyword);
+    if(!keyword.trim()) {
+        alert('검색어를 입력해 주세요');
+        return;
+    }
+
+    const encodedKeyword = encodeURIComponent(keyword);
+    fetch("http://localhost:8080/Announcement/search?keyword="+encodedKeyword)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('검색 결과를 가져오는데 실패했습니다.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('data: '+data);
+        if(!data || !data.length === 0) {
+            alert('검색된 결과가 없습니다');
+            return;
+        }
+
+        const announcements = data;
+        const table = document.querySelector("#cont_table");
+        let rows = "<tr><td>[공지번호]</td><td>[이벤트/공지제목]</td><td>[작성일]</td><td>[수정일]</td></tr>";
+
+        if(announcements.length <= 0) {
+            table.innerHTML = "<tr><td colspan='4'> 검색된 결과가 없습니다.</td></tr>";
+        } else {
+            announcements.forEach(announcement => {
+                const createdAt = new Date(announcement.created_at).toLocaleString();
+                const modifiedAt = new Date(announcement.modified_at).toLocaleString();
+                rows +=
+                    "<tr>" +
+                    "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Id + "</a></td>" +
+                    "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Title + "</td>" +
+                    "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + createdAt + "</td>" +
+                    "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + modifiedAt + "</td>" +
+                    "</tr>";
+            });
+            table.innerHTML = rows;
+        }
+    })
+    .catch(error => {
+        console.error('Error during fetch operation: ', error);
+        alert('검색 중 오류가 발생했습니다.');
+    });
+}
+
 
 function aesc_btn(){
   fetch('http://localhost:8080/Announcement/all?page=1&size=10')
@@ -123,21 +183,20 @@ function aesc_btn(){
       console.log("응답:", data); // 데이터 확인을 위한 로그
       const announcements = data.data;
       const table = document.querySelector("#cont_table");
-      let rows = '';
+      let rows = "<tr><td>[공지번호]</td><td>[이벤트/공지제목]</td><td>[작성일]</td><td>[수정일]</td></tr>";
       if(announcements.length <= 0) {
         table.innerHTML = "<tr><td>작성된 이벤트/공지사항이 없습니다.</td></tr>";
       } else{
       announcements.forEach(announcement => {
         const createdAt = new Date(announcement.created_at).toLocaleString();
-        console.log("공지번호: ", announcement.announcement_Id);
-        console.log("공지제목: ", announcement.announcement_Title);
-        console.log("작성일: ", createdAt);
+        const modifiedAt = new Date(announcement.modified_at).toLocaleString();
         rows +=
-          "<tr>"+
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[공지번호]: " + announcement.announcement_Id + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[이벤트/공지 제목]: " + announcement.announcement_Title + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[작성일]: " + createdAt + "</a></td>"+
-          "</tr>";
+            "<tr>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Id + "</a></td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Title + "</td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + createdAt + "</td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + modifiedAt + "</td>" +
+            "</tr>";
           console.log("rows: ", rows);
         });
         table.innerHTML = rows; // 모든 행을 한 번에 테이블에 추가
@@ -160,21 +219,23 @@ function desc_btn(){
       console.log("응답:", data); // 데이터 확인을 위한 로그
       const announcements = data.data.reverse();
       const table = document.querySelector("#cont_table");
-      let rows = '';
+      let rows = "<tr><td>[공지번호]</td><td>[이벤트/공지제목]</td><td>[작성일]</td><td>[수정일]</td></tr>";
       if(announcements.length <= 0) {
         table.innerHTML = "<tr><td>작성된 이벤트/공지사항이 없습니다.</td></tr>";
       } else{
       announcements.forEach(announcement => {
         const createdAt = new Date(announcement.created_at).toLocaleString();
+        const modifiedAt = new Date(announcement.modified_at).toLocaleString();
         console.log("공지번호: ", announcement.announcement_Id);
         console.log("공지제목: ", announcement.announcement_Title);
         console.log("작성일: ", createdAt);
         rows +=
-          "<tr>"+
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[공지번호]: " + announcement.announcement_Id + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[이벤트/공지 제목]: " + announcement.announcement_Title + "</a></td>" +
-          "<td><a href='/Announcement/"+announcement.announcement_Id+"'>[작성일]: " + createdAt + "</a></td>"+
-          "</tr>";
+            "<tr>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Id + "</a></td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + announcement.announcement_Title + "</td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + createdAt + "</td>" +
+            "<td><a href='/Announcement/" + announcement.announcement_Id + "'>" + modifiedAt + "</td>" +
+            "</tr>";
           console.log("rows: ", rows);
         });
         table.innerHTML = rows; // 모든 행을 한 번에 테이블에 추가

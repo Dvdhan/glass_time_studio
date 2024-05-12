@@ -19,4 +19,5 @@ public interface AnnouncementMapper {
     })
     AnnouncementDto.Response announcementToAnnouncementDtoResponse (Announcement announcement);
     List<AnnouncementDto.Response> announcementsToAnnouncementDtoResponse (List<Announcement> announcements);
+
 }

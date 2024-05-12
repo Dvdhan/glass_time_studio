@@ -85,7 +85,7 @@
         .then(data => {
             console.log("서버 응답:", data);
             alert('게시글이 작성이 완료되었습니다.');
-            window.location.href = '/main';
+            window.location.href = '/announcement';
         })
         .catch(error => {
             console.error('문제가 발생했습니다:', error);

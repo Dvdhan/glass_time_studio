@@ -21,6 +21,7 @@
             <p>휴대폰 번호: <input type="text" name="mobile" id="mobile" value="${param.mobile}"></p>
             <p>생일: ${param.birthday}</p>
             <input type="hidden" name="memberId" id="memberId" value="${param.memberId}">
+
             <div style="text-align: right;">
               <button type="submit" onClick="alertMessage();">저장하기</button>
             </div>
