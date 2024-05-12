@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @Validated
@@ -53,12 +54,28 @@ public class AnnouncementController {
     @PatchMapping("/{announcement_Id}")
     public ResponseEntity patchAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id,
                                              @RequestBody AnnouncementDto.Patch patch){
+        log.info("전달받은 수정 id: "+announcement_id);
         Announcement announcement = announcementMapper.announcementDtoPatchToAnnouncement(patch);
+        log.info("받은 JSON 데이터: "+patch);
+        log.info("전달받은 수정 타이틀: "+announcement.getAnnouncement_Title());
+        log.info("전달받은 수정 바디: "+announcement.getAnnouncement_Content());
         Announcement updatedAnnouncement = announcementService.updateAnnouncement(announcement, announcement_id);
         AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(updatedAnnouncement);
         return new ResponseEntity(response, HttpStatus.OK);
-
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<AnnouncementDto.Response>> searchAnnouncements(@RequestParam("keyword") String keyword){
+        log.info("전달받은 검색어: "+keyword);
+        List<Announcement> announcements = announcementService.searchAnnouncementsByTitle(keyword);
+        log.info("검색어로 조회한 데이터: "+announcements);
+        log.info("검색어로 조회한 데이터의 id"+announcements.toString());
+        List<AnnouncementDto.Response> responses = announcements.stream()
+                .map(announcementMapper::announcementToAnnouncementDtoResponse)  // 각 객체를 개별적으로 변환
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
+
     // 공지사항 단일 조회
 //    @GetMapping("/{announcement_Id}")
 //    public ResponseEntity findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id){
