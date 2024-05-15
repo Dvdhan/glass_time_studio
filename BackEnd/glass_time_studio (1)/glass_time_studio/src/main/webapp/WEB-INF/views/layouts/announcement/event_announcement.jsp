@@ -190,7 +190,7 @@ function search_keyword(){
     })
     .then(data => {
         console.log('data: '+data);
-        if(!data || !data.length === 0) {
+        if(!data || data.length === 0) {
             alert('검색된 결과가 없습니다');
             return;
         }

@@ -72,6 +72,12 @@
       border-right: 1px solid white;
       border-left : 1px solid white;
     }
+    #manager{
+        margin-bottom: 2em;
+    }
+    #manager button{
+        color: white;
+    }
 
   </style>
 </head>
@@ -195,12 +201,7 @@
             <td style="border-bottom: 1px solid white; padding-bottom: 10px;">&bull; 지인 원데이클래스 12% 할인쿠폰 2장</td>
           </tr>
         </tbody>
-      </table>      
-
-
-
-
-      
+      </table>
     </div>
 
     <div id="introduce">
@@ -234,6 +235,14 @@
         <button><a target="_blank" href="https://talk.naver.com/ct/w4fpms?frm=pblog#nafullscreen">네이버 톡톡 문의하기</a></button>
       </div>
     </div>
+
+    <% if(request.getAttribute("member") != null && (Boolean) request.getAttribute("isAdmin")) { %>
+      <div id="manager">
+          <button><a href="/createLecture">클래스 추가하기</a></button>
+          <button><a href="/viewLecture">클래스 수정하기</a></button>
+          <button><a href="">클래스 삭제하기</a></button>
+      </div>
+    <% } %>
     
   </div>
 

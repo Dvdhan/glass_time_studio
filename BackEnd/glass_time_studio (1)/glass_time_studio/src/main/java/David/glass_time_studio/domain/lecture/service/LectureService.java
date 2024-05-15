@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,18 @@ public class LectureService {
 
     public Page<Lecture> findAllLecture(int page, int size){
         return lectureRepository.findAllLecture(PageRequest.of(page, size));
+    }
+
+    public List<Lecture> getAllAvailableLectures() {
+        return lectureRepository.findAvailableLectures();
+    }
+
+    public List<Lecture> getAllLectures() {
+        return lectureRepository.findAll();
+    }
+
+    public List<Lecture> searchLecturesByTitle(String keyword){
+        return lectureRepository.searchLecture("%" + keyword + "%");
     }
 
     public Lecture updateLecture(Lecture lecture, Long lecture_Id){

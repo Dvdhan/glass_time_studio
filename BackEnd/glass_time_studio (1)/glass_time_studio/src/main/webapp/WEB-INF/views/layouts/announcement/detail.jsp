@@ -20,6 +20,7 @@
       text-align: left;
       border: 1px solid white;
       margin: auto;
+      padding: 0.5em;
     }
     #update, #delete{
       border: 1px solid white;
