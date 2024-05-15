@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="David.glass_time_studio.domain.lecture.entity.Lecture" %>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -54,8 +57,14 @@
         <div class="body">
           <select name="class_type_select" id="class_type_select">
             <option value="none">선택</option>
-            <option value="oneday">1. 원데이 클래스</option>
-            <option value="hobby">2. 취미반 클래스</option>
+            <%
+              List<Lecture> lectures = (List<Lecture>) request.getAttribute("lectures");
+              if (lectures != null) {
+                for (Lecture lecture : lectures) {
+                  out.print("<option value=\"" + lecture.getLecture_Id() + "\">" + lecture.getLecture_Name() + "</option>");
+                }
+              }
+            %>
           </select>
         </div>
       </div>
