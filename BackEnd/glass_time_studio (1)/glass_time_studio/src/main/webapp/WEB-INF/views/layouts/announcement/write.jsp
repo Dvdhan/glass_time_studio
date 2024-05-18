@@ -65,6 +65,11 @@
         let title = document.getElementById('announcement_Title').value;
         let content = CKEDITOR.instances.announcement_Content.getData();
 
+        if (!title || !content) {
+            alert('제목과 내용을 입력해주세요');
+            return;
+        }
+
         // AJAX 요청을 구성
         fetch('/Announcement', {
             method: 'POST',
@@ -89,6 +94,7 @@
         })
         .catch(error => {
             console.error('문제가 발생했습니다:', error);
+            alert('게시글 작성 중 오류가 발생했습니다. 다시 시도해주세요');
         });
     }
   </script>

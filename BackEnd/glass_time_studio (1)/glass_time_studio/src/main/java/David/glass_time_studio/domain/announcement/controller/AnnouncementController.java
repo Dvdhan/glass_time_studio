@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,16 +41,41 @@ public class AnnouncementController {
     }
 
     // 공지사항 추가
+//    @Transactional
+//    @PostMapping
+//    public ResponseEntity postAnnouncement (@RequestBody @Valid AnnouncementDto.Post post){
+//        Announcement announcement = announcementMapper.announcementDtoPostToAnnouncement(post);
+//        Announcement postedAnnouncement = announcementService.postAnnouncement(announcement);
+//        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(postedAnnouncement);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Access-Control-Expose-Headers", "Authorization");
+//        return new ResponseEntity(response, headers, HttpStatus.CREATED);
+//    }
     @Transactional
     @PostMapping
-    public ResponseEntity postAnnouncement (@RequestBody @Valid AnnouncementDto.Post post){
-        Announcement announcement = announcementMapper.announcementDtoPostToAnnouncement(post);
-        Announcement postedAnnouncement = announcementService.postAnnouncement(announcement);
-        AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(postedAnnouncement);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Expose-Headers", "Authorization");
-        return new ResponseEntity(response, headers, HttpStatus.CREATED);
+    public ResponseEntity<?> postAnnouncement(@RequestBody @Valid AnnouncementDto.Post post, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Announcement announcement = announcementMapper.announcementDtoPostToAnnouncement(post);
+            Announcement postedAnnouncement = announcementService.postAnnouncement(announcement);
+            AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(postedAnnouncement);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Access-Control-Expose-Headers", "Authorization");
+            return new ResponseEntity<>(response, headers, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();  // 콘솔에 상세 오류 로그 출력
+            return new ResponseEntity<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
+
+
+
     // 공지사항 수정
     @PatchMapping("/{announcement_Id}")
     public ResponseEntity patchAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id,
