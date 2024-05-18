@@ -18,6 +18,6 @@ public class Announcement extends Auditable {
     private Long announcement_Id;
     @Column
     private String announcement_Title;
-    @Column
+    @Column(length = 100000)
     private String announcement_Content;
 }

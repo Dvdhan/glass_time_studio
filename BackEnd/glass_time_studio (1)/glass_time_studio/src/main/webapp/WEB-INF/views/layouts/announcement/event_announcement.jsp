@@ -67,7 +67,7 @@
         </table>
       </div>
       <div id="search_area" style="margin-top: 1em;">
-      <input type="text" id="keyword" name="keyword">
+      <input type="text" id="keyword" name="keyword" onkeypress="handleKeyPress(event)">
       <button onClick="search_keyword();">검색하기</button>
       </div>
       <div id="pagination" style="margin-top: 1em;"></div>
@@ -243,6 +243,13 @@ function desc_effect_btn_off() {
     let target = document.getElementById("desc_order_btn");
     target.style.color="white";
     target.style.textDecoration="none";
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter'){
+        event.preventDefault(); // 기본 제출 동작을 방지
+        search_keyword();
+    }
 }
 </script>
 </body>

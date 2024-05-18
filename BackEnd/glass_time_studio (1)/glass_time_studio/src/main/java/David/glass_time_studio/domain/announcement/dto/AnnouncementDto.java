@@ -2,6 +2,7 @@ package David.glass_time_studio.domain.announcement.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,10 @@ public class AnnouncementDto {
     @Setter
     @Getter
     public static class Post{
-        @NotBlank
+        @NotBlank(message = "제목은 공백일 수 없습니다.")
         String announcement_Title;
-        @NotBlank
+        @NotBlank(message = "내용은 공백일 수 없습니다.")
+        @Size(max = 100000, message = "내용은 100000자 이하이어야 합니다.")
         String announcement_Content;
     }
 
