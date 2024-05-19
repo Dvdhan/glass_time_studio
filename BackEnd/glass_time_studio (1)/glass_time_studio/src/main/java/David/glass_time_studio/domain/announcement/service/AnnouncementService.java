@@ -35,6 +35,7 @@ public class AnnouncementService {
         return foundAnnouncement;
     }
 
+    // 공지사항 검색
     public List<Announcement> searchAnnouncementsByTitle(String keyword){
         return announcementRepository.searchAnnouncement("%" + keyword + "%");
     }

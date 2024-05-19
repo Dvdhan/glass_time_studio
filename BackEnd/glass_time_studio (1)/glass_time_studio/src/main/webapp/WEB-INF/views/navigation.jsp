@@ -19,13 +19,23 @@
     <li><a href="/product">제품 구매하기</a></li>
     <li><a href="/review">수강생 후기</a></li>
     <% if (request.getAttribute("isLoggedIn") != null && (Boolean) request.getAttribute("isLoggedIn")) { %>
-      <div id="after_login">
-        <li style="border: 1px solid black;"><a href=""></a></li>
-        <li style="border: 1px solid black;"><a href=""></a></li>
-        <li style="border: 1px solid black;"><a href=""></a></li>
-        <li><a href="/mypage">마이페이지</a></li>
-        <li><a href="/member/logout">로그 아웃</a></li>
-      </div>
+        <% if ((Boolean) request.getAttribute("isAdmin")) { %>
+          <div id="after_login">
+            <li style="border: 1px solid black;"><a href=""></a></li>
+            <li style="border: 1px solid black;"><a href=""></a></li>
+            <li><a href="/manager">관리자 페이지</a></li>
+            <li><a href="/mypage">마이페이지</a></li>
+            <li><a href="/member/logout">로그 아웃</a></li>
+          </div>
+        <% } else { %>
+              <div id="after_login">
+                <li style="border: 1px solid black;"><a href=""></a></li>
+                <li style="border: 1px solid black;"><a href=""></a></li>
+                <li style="border: 1px solid black;"><a href=""></a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/member/logout">로그 아웃</a></li>
+              </div>
+        <% } %>
     <% } %>
   </ul>
 </div>

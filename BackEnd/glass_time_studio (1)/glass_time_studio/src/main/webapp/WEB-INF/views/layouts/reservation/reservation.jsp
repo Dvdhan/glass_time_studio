@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="David.glass_time_studio.domain.lecture.entity.Lecture" %>
+<%@ page import="David.glass_time_studio.domain.member.entity.Member" %>
 
 <html lang="en">
 <head>
@@ -11,7 +12,7 @@
 
   <style>
     fieldset{
-      width: 40%;
+      width: 28em;
       margin: auto;
     }
     #class_type, #class_date, #class_time, #class_ppl, #class_message, #class_phone{
@@ -43,7 +44,7 @@
 <body>
   <%@ include file="../../navigation.jsp" %>
 
-  <form id="reservation_form" action="#">
+  <form id="reservation_form">
     <fieldset>
       <legend>
         <h1>&nbsp;&nbsp;예약하기&nbsp;&nbsp;</h1>
@@ -55,7 +56,7 @@
         </div>
 
         <div class="body">
-          <select name="class_type_select" id="class_type_select">
+          <select name="lectureId" id="class_type_select">
             <option value="none">선택</option>
             <%
               List<Lecture> lectures = (List<Lecture>) request.getAttribute("lectures");
@@ -75,7 +76,7 @@
         </div>
 
         <div class="body">
-          <input type="date" name="rsvn_date_select" id="rsvn_date_select"></input>
+          <input type="date" name="requestDate" id="rsvn_date_select"></input>
         </div>
       </div>
 
@@ -85,7 +86,7 @@
         </div>
 
         <div class="body">
-          <select name="rsvn_time_select" id="rsvn_time_select">
+          <select name="requestTime" id="rsvn_time_select">
             <option value="none">선택</option>
             <option value="1100">[첫시작] 11:00 ~</option>
             <option value="1500">[마지막] 15:00 ~</option>
@@ -95,11 +96,21 @@
 
       <div id="class_ppl">
         <div class="head">
-          참여 인원
+          참여 인원 수
         </div>
 
         <div class="body">
-          <input type="number" name="rsvn_ppl_num" id="rsvn_ppl_num">
+          <input type="number" name="peopleNumber" id="rsvn_ppl_num">
+        </div>
+      </div>
+
+      <div id="class_ppl">
+        <div class="head">
+          예약자 성함
+        </div>
+
+        <div class="body">
+          <input type="text" name="bookerName" id="rsvn_booker_name">
         </div>
       </div>
 
@@ -109,7 +120,7 @@
         </div>
         
         <div class="body">
-          <input type="number" name="rsvn_ppl_ph" id="rsvn_ppl_ph" placeholder=" - 제외, 휴대폰 번호만 입력해주세요.">
+          <input type="text" name="mobile" id="rsvn_ppl_ph" placeholder=" - 제외, 휴대폰 번호만 입력해주세요.">
         </div>
       </div>
 
@@ -119,7 +130,7 @@
         </div>
 
         <div class="body">
-          <textarea cols="30" rows="5" id="rsvn_message"></textarea>
+          <textarea cols="30" rows="5" id="rsvn_message" name="requestMessage"></textarea>
         </div>
       </div>
 
@@ -127,44 +138,99 @@
         <!-- <button type="submit">예약 요청하기</button> -->
         <button onclick="rsvnBtn();" type="button">예약 요청하기</button>
       </div>
-      
     </fieldset>
+
+
+    <%
+        Member member = (Member) request.getAttribute("member");
+        if (member != null && member.getMemberId() != null) {
+    %>
+        <input type="hidden" id="memberId" name="memberId" value="${member.memberId}">
+    <%
+        } else {
+    %>
+        <input type="hidden" id="memberId" name="memberId" value="">
+    <%
+        }
+    %>
   </form>
   
 
   <script>
     function rsvnBtn(){
-      let classType = document.querySelector('#class_type_select').value;
-      let classDate = document.querySelector('#rsvn_date_select').value;
-      let classTime = document.querySelector('#rsvn_time_select').value;
-      let pplNum = document.querySelector('#rsvn_ppl_num').value;
-      let classMessage = document.querySelector('#rsvn_message').value;
-      let class_phone = document.querySelector('#rsvn_ppl_ph').value;
+      let lectureId = document.querySelector('#class_type_select').value;
+      let requestDate = document.querySelector('#rsvn_date_select').value;
+      let requestTime = document.querySelector('#rsvn_time_select').value;
+      let bookerName = document.querySelector('#rsvn_booker_name').value;
+      let peopleNumber = document.querySelector('#rsvn_ppl_num').value;
+      let requestMessage = document.querySelector('#rsvn_message').value;
+      let mobile = document.querySelector('#rsvn_ppl_ph').value;
+      let memberId = document.querySelector('#memberId').value;
 
       let today = new Date();
       today.setHours(0, 0, 0, 0);
-      let selectedDate = new Date(classDate);
+      let selectedDate = new Date(requestDate);
       selectedDate.setHours(0, 0, 0, 0);
 
-
-      if(classType === "none"){
+      if(lectureId === "none"){
         alert('클래스 종류를 선택해주세요');
-      }else if(!classDate || selectedDate < today){
+      }else if(!requestDate || requestDate < today){
         alert('유효한 요청 날짜를 선택해주세요(오늘 이후의 날짜)');
-      }else if(classTime ==="none"){
+      }else if(requestTime ==="none"){
         alert('요청 시간을 선택해주세요');
-      }else if(!pplNum){
+      }else if(!peopleNumber){
         alert('참여 인원을 선택해주세요');
-      }else if(!class_phone){
+      }else if(!mobile){
         alert('휴대폰 번호를 입력해주세요');
-      }else if(class_phone.length >11 || class_phone.length <11){
+      }else if(mobile.length >11 || mobile.length <11){
         alert('휴대폰 번호를 확인해주세요.');
-      }else if(!classMessage){
+      }else if(!requestMessage){
         alert('메세지를 작성해주세요'); 
-      }else {
-        alert('예약 요청이 완료되었습니다.\n일정 확인 후 연락드리겠습니다.');
-        document.getElementById('reservation_form').submit();
-        window.location.href = "/main";
+      }else if(!memberId){
+        alert('수업 예약을 위해서는 로그인이 필수 입니다.\n로그인 이후 다시 요청해주세요');
+      }
+      else {
+        console.log({
+          lectureId: parseInt(lectureId),
+          requestDate: requestDate,
+          requestTime: requestTime,
+          peopleNumber: parseInt(peopleNumber),
+          bookerName: bookerName,
+          requestMessage: requestMessage,
+          mobile: mobile,
+          memberId: parseInt(memberId)
+        });
+        fetch('/Booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              lectureId: parseInt(lectureId),
+              requestDate: requestDate,
+              requestTime: requestTime,
+              peopleNumber: parseInt(peopleNumber),
+              bookerName: bookerName,
+              requestMessage: requestMessage,
+              mobile: mobile,
+              memberId: parseInt(memberId)
+            })
+        })
+        .then(response => {
+            if(response.ok){
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then(data => {
+            console.log("서버 응답: ", data);
+            alert('예약 요청이 완료되었습니다.\n일정 확인 후 연락드리겠습니다.');
+            window.location.href = "/main";
+        })
+        .catch(error => {
+            console.error('문제가 발생했습니다: ', error);
+            alert('예약 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+        })
       }
     }
   </script>

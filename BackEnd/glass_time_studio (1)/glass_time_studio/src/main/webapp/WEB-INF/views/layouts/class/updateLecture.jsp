@@ -70,11 +70,49 @@
           <button type="button" onclick="submitForm()">저장</button>
           </div>
         </fieldset>
+        <input type="hidden" name="lecture_Id" id="lecture_Id" value="${param.id}">
     </form>
 
 <script>
 function submitForm() {
-    alert('저장됬겠니 ?');
+    var formData = {
+        lecture_Id : document.getElementById('lecture_Id').value,
+        lecture_Name : document.getElementById('class_title_input').value,
+        lecture_Period : document.getElementById('class_period_input').value,
+        lecture_Cost: document.getElementById('class_cost_input').value,
+        lecture_Description: document.getElementById('class_description_input').value,
+        lecture_Status: document.getElementById('class_status_value').value
+    };
+    console.log('formData: '+formData);
+
+    fetch('/lecture/'+ formData.lecture_Id, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            lecture_Name: formData.lecture_Name,
+            lecture_Period: formData.lecture_Period,
+            lecture_Price: formData.lecture_Cost,
+            lecture_Description: formData.lecture_Description,
+            status: formData.lecture_Status
+        })
+    })
+    .then(response => {
+        if(!response.ok){
+            throw new Error('수정 실패');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('수정되었습니다.');
+        window.location.href = '/viewLecture';
+    })
+    .catch(error => {
+        console.error('Error: ', error);
+        alert('수정 중 문제가 발생하였습니다. 콘솔로그 확인해주세요');
+    });
+
 }
 
 </script>
