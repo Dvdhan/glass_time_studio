@@ -25,7 +25,6 @@
     #cont{
       margin: auto;
       width: 30em;
-
     }
     #cont_table{
       margin: auto;

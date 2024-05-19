@@ -78,6 +78,12 @@
     #manager button{
         color: white;
     }
+    #notice_login{
+        border: 1px solid white;
+        width: 20em;
+        margin: auto;
+        margin-top: 1em;
+    }
 
   </style>
 </head>
@@ -226,6 +232,10 @@
       </div>
     </div>
 
+    <div id="notice_login">
+        <h1>클래스 예약은 로그인이 필수 입니다.</h1>
+    </div>
+
     <div id="btns">
       <div id="make_rsvn">
         <button><a href="/reservation">클래스 예약하기</a></button>
@@ -240,7 +250,6 @@
       <div id="manager">
           <button><a href="/createLecture">클래스 추가하기</a></button>
           <button><a href="/viewLecture">클래스 수정하기</a></button>
-          <button><a href="">클래스 삭제하기</a></button>
       </div>
     <% } %>
     

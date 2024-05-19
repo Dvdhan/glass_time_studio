@@ -59,7 +59,19 @@ public class LectureController {
     public ResponseEntity updateLecture(@PathVariable("lecture_Id")@Positive Long lecture_id,
                                         @RequestBody LectureDto.Patch patch){
         Lecture lecture = lectureMapper.lectureDtoPatchToLecture(patch);
+        log.info("요청받은 수정된 lecture 이름: "+lecture.getLecture_Name());
+        log.info("요청받은 수정된 lecture 가격: "+lecture.getLecture_Price());
+        log.info("요청받은 수정된 lecture 기간: "+lecture.getLecture_Period());
+        log.info("요청받은 수정된 lecture 설명: "+lecture.getLecture_Description());
+        log.info("요청받은 수정된 lecture 상태: "+lecture.getStatus());
+        log.info("요청받은 수정된 lecture 아이디: "+lecture_id);
+
         Lecture updatedLecture = lectureService.updateLecture(lecture, lecture_id);
+        log.info("수정된 lecture 이름: "+updatedLecture.getLecture_Name());
+        log.info("수정된 lecture 가격: "+updatedLecture.getLecture_Price());
+        log.info("수정된 lecture 기간: "+updatedLecture.getLecture_Period());
+        log.info("수정된 lecture 설명: "+updatedLecture.getLecture_Description());
+        log.info("수정된 lecture 상태: "+updatedLecture.getStatus());
         LectureDto.Response response = lectureMapper.lectureToLectureDtoResponse(updatedLecture);
         return new ResponseEntity(response, HttpStatus.OK);
     }

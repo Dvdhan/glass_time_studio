@@ -1,5 +1,6 @@
 package David.glass_time_studio.domain.member.entity;
 
+import David.glass_time_studio.domain.booking.entity.Booking;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,9 @@ public class Member {
     private List<String> authorities = new ArrayList<>();
     @Column
     private String permit;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<Booking> bookings = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;
