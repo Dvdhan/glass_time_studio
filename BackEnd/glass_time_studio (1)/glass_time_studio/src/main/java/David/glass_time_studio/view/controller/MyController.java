@@ -566,7 +566,14 @@ public class MyController {
     public String findBooking(@PathVariable("bookingId")@Positive Long bookingId,
                               Model model){
         Booking booking = bookingService.findBooking(bookingId);
+        Long memberId = booking.getMember().getMemberId();
+        log.info("예약정보 - 회원아이디: "+memberId);
+
         BookingDto.Response response = bookingMapper.bookingToBookingDtoResponse(booking);
+        if(memberId != null){
+            response.setMemberId(memberId);
+        }
+        log.info("응답에서 회원 아이디: "+response.getMemberId());
         model.addAttribute("booking", response);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -592,5 +599,35 @@ public class MyController {
         }
 
         return "layouts/reservation/booking_detail";
+    }
+
+    @GetMapping("/myBooking/{memberId}")
+    public String seeMyBooking(@PathVariable("memberId")@Positive Long memberId,
+                               Model model){
+        Booking myBooking = bookingService.findMyBooking(memberId);
+        BookingDto.Response response = bookingMapper.bookingToBookingDtoResponse(myBooking);
+        model.addAttribute("booking", response);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+        if(authentication.getPrincipal() instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> responseAttributes = (Map<String, Object>) attributes.get("response");
+            String email = String.valueOf(responseAttributes.get("email"));
+            Member member = memberRepository.findMemberByEmail(email);
+            if(member != null){
+                model.addAttribute("member", member);
+
+                boolean isAdmin = "ADMIN".equals(member.getPermit());
+                model.addAttribute("isAdmin", isAdmin);
+            }else {
+                model.addAttribute("member",null);
+            }
+        }else {
+            System.out.println("Pricipal Type: "+authentication.getPrincipal().getClass());
+        }
+        return "layouts/mypage/myBooking";
     }
 }

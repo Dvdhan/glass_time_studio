@@ -38,7 +38,7 @@
       grid-area: make_rsvn;
     }
     #make_rsvn a, #asking a{
-      font-size: 1.7em;
+      font-size: 1.2em;
       padding: 5px;
     }
     #asking{
@@ -77,12 +77,6 @@
     }
     #manager button{
         color: white;
-    }
-    #notice_login{
-        border: 1px solid white;
-        width: 20em;
-        margin: auto;
-        margin-top: 1em;
     }
 
   </style>
@@ -232,14 +226,17 @@
       </div>
     </div>
 
-    <div id="notice_login">
-        <h1>클래스 예약은 로그인이 필수 입니다.</h1>
-    </div>
-
     <div id="btns">
+
+    <% if (request.getAttribute("isLoggedIn") != null && (Boolean) request.getAttribute("isLoggedIn")) { %>
       <div id="make_rsvn">
         <button><a href="/reservation">클래스 예약하기</a></button>
       </div>
+    <% } else { %>
+      <div id="make_rsvn">
+          <button><a>클래스 예약은 로그인이 필수 입니다.</a></button>
+      </div>
+    <% } %>
 
       <div id="asking">
         <button><a target="_blank" href="https://talk.naver.com/ct/w4fpms?frm=pblog#nafullscreen">네이버 톡톡 문의하기</a></button>
