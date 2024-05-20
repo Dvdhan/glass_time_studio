@@ -1,5 +1,6 @@
 package David.glass_time_studio.domain.booking.dto;
 
+import David.glass_time_studio.domain.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -60,7 +61,8 @@ public class BookingDto {
         Long peopleNumber;
         String requestMessage;
         String status;
-
+        @NotNull
+        private Long memberId;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime created_at;
 

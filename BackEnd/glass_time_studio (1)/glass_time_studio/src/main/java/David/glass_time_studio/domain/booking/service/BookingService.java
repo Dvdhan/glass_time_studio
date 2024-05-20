@@ -27,8 +27,19 @@ public class BookingService {
         this.bookingRepository=bookingRepository;
     }
 
-    // 예약 생성
+    // 예약 찾기 (memberId)
+    public Booking findMyBooking(Long memberId){
+        return bookingRepository.findMyBooking(memberId);
+    }
 
+
+    // 예약 확정
+    public void confirmBook(Long bookingId){
+        bookingRepository.confirmRSVN(bookingId);
+    }
+    public void cancelBook(Long bookingId){
+        bookingRepository.cancelRSVN(bookingId);
+    }
     public Booking makeNewBooking(Booking booking){
         return bookingRepository.save(booking);
     }

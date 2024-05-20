@@ -125,6 +125,24 @@ public class BookingController {
         BookingDto.Response response = bookingMapper.bookingToBookingDtoResponse(updatedBooking);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    @PostMapping("/confirm/{bookingId}")
+    public ResponseEntity confirmBooking(@PathVariable("bookingId")@Positive Long bookingId){
+        bookingService.confirmBook(bookingId);
+
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "요청하신 '"+bookingId+"'번 예약 확정이 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
+    @PostMapping("/cancel/{bookingId}")
+    public ResponseEntity cancelBooking(@PathVariable("bookingId")@Positive Long bookingId){
+        bookingService.cancelBook(bookingId);
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "요청하신 '"+bookingId+"'번 예약 취소가 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
+
+
     @GetMapping("/search")
     public ResponseEntity<List<BookingDto.Response>> searchAnnouncements(@RequestParam("keyword") String keyword){
         log.info("전달받은 검색어: "+keyword);

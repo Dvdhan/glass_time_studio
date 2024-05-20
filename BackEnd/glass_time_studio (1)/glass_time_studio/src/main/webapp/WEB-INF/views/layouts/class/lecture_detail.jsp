@@ -43,7 +43,6 @@
           <div class="class_attribute">
             <span class="class_head">클래스 이름</span>
             <span>${lecture.lecture_Name}</span>
-
           </div>
 
           <div class="class_attribute">
@@ -77,27 +76,27 @@
 
 <script>
     function deleteLecture(){
-            var lecture_Id = "${lecture.lecture_Id}";
-            if(confirm('정말로 삭제하시겠습니까 ?')){
-                fetch('/lecture/' + lecture_Id, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error ('삭제 실패');
-                    return response.json();
-                })
-                .then(data => {
-                    alert(data.message);
-                    window.location.href = '/viewLecture';
-                })
-                .catch(error => {
-                    console.error('Error: ', error);
-                    alert('삭제 중 문제가 발생했습니다.');
-                });
-            }
+        var lecture_Id = "${lecture.lecture_Id}";
+        if(confirm('정말로 삭제하시겠습니까 ?')){
+            fetch('/lecture/' + lecture_Id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error ('삭제 실패');
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                window.location.href = '/viewLecture';
+            })
+            .catch(error => {
+                console.error('Error: ', error);
+                alert('삭제 중 문제가 발생했습니다.');
+            });
+        }
     }
 </script>
 </body>

@@ -19,7 +19,7 @@
             align-items: center;
             margin-top: 0.5em;
         }
-        #confirm_btn{
+        #update_btn {
             margin-top: 1em;
         }
 
@@ -51,11 +51,6 @@
             </div>
 
             <div class="class_attribute">
-            <span>예약자 아이디</span>
-            <span>${booking.memberId}</span>
-            </div>
-
-            <div class="class_attribute">
             <span>예약자 휴대폰 번호</span>
             <span>${booking.mobile}</span>
             </div>
@@ -70,61 +65,15 @@
             <span>${booking.status}</span>
             </div>
 
-            <div id="confirm_btn">
-            <button type="button" onclick="confirm_booking()">예약 확정</button>
-            <button type="button" onclick="cancel_booking()">예약 취소</button>
+            <div id="update_btn">
+                <button>예약 정보 수정하기</button>
             </div>
         </fieldset>
     </form>
 
 
 <script>
-function confirm_booking() {
-    var bookingId = "${booking.bookingId}";
-    if(confirm('정말로 예약을 확정하시겠습니까 ?')){
-        fetch('/Booking/confirm/'+bookingId, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error ('예약 확정 실패');
-            return response.json();
-        })
-        .then(data => {
-            alert(data.message);
-            window.location.href = '/viewReservation';
-        })
-        .catch(error => {
-            console.error('Error: ', error);
-            alert('예약 확정 중 문제가 발생하였습니다.');
-        });
-    }
-}
-function cancel_booking() {
-    var bookingId = "${booking.bookingId}";
-    if(confirm('정말로 예약을 취소하시겠습니까 ?')){
-        fetch('/Booking/cancel/'+bookingId, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error ('예약 취소 실패');
-            return response.json();
-        })
-        .then(data => {
-            alert(data.message);
-            window.location.href = '/viewReservation';
-        })
-        .catch(error => {
-            console.error('Error: ', error);
-            alert('예약 취소 중 문제가 발생하였습니다.');
-        });
-    }
-}
+
 </script>
 </body>
 </html>
