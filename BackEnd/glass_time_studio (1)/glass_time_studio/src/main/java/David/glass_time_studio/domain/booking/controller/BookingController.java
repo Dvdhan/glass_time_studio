@@ -73,14 +73,14 @@ public class BookingController {
             Long memberId = post.getMemberId();
 
             Booking booking = bookingMapper.bookingDtoPostToBooking(post);
-            booking.setLecture_Id(lectureId);
-            log.info("수업 예약 요청의 수업번호: {}", booking.getLecture_Id());
+            booking.setLectureId(lectureId);
+            log.info("수업 예약 요청의 수업번호: {}", booking.getLectureId());
 
             Member bookerMember = memberService.findMemberById(memberId);
             booking.setMember(bookerMember);
             log.info("수업 예약 요청의 회원번호: {}", booking.getMember().getMemberId());
 
-            Lecture lecture = lectureService.findLecture(booking.getLecture_Id());
+            Lecture lecture = lectureService.findLecture(booking.getLectureId());
             log.info("수업 예약 요청의 수업 이름: {}", lecture.getLecture_Name());
 
             booking.setStatus("N");
@@ -142,17 +142,49 @@ public class BookingController {
         return ResponseEntity.ok(responseMessage);
     }
 
+    // 회원번호 기준 예약 전체 조회
+    @GetMapping("/all/{memberId}")
+    public ResponseEntity findAllLecture(@Positive @RequestParam int page,
+                                         @Positive @RequestParam int size,
+                                         @PathVariable("memberId")@Positive Long memberId){
+        Page<Booking> bookings = bookingService.findAllBookingsByMemberId(page-1, size, memberId);
 
-    @GetMapping("/search")
-    public ResponseEntity<List<BookingDto.Response>> searchAnnouncements(@RequestParam("keyword") String keyword){
+        PageInfo pageInfo = new PageInfo(
+                bookings.getNumber(),
+                bookings.getSize(),
+                bookings.getTotalElements(),
+                bookings.getTotalPages());
+        List<Booking> bookingList = bookings.getContent();
+        List<BookingDto.Response> responses = bookingMapper.bookingsToBookingDtoResponse(bookingList);
+
+        return new ResponseEntity(
+                new MultiResponse<>(responses, pageInfo), HttpStatus.OK);
+    }
+
+
+    // 검색 for Y
+    @GetMapping("/search_Y")
+    public ResponseEntity<List<BookingDto.Response>> searchAnnouncements_Y(@RequestParam("keyword") String keyword){
         log.info("전달받은 검색어: "+keyword);
-        List<Booking> bookings = bookingService.searchByName(keyword);
+        List<Booking> bookings = bookingService.searchByName_Y(keyword);
         log.info("검색어로 조회한 데이터: "+bookings);
         List<BookingDto.Response> responses = bookings.stream()
                 .map(bookingMapper::bookingToBookingDtoResponse)  // 각 객체를 개별적으로 변환
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
+    // 검색 for N
+    @GetMapping("/search_N")
+    public ResponseEntity<List<BookingDto.Response>> searchAnnouncements_N(@RequestParam("keyword") String keyword){
+        log.info("전달받은 검색어: "+keyword);
+        List<Booking> bookings = bookingService.searchByName_N(keyword);
+        log.info("검색어로 조회한 데이터: "+bookings);
+        List<BookingDto.Response> responses = bookings.stream()
+                .map(bookingMapper::bookingToBookingDtoResponse)  // 각 객체를 개별적으로 변환
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
+
 
     // 예약 취소
     @DeleteMapping("/{bookingId}")

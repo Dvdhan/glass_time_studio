@@ -17,8 +17,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "SELECT * FROM BOOKING ORDER BY booking_id", nativeQuery = true)
     public Page<Booking> findAllBookings(Pageable pageable);
 
-    @Query(value = "SELECT * FROM BOOKING WHERE booker_name LIKE :keyword", nativeQuery = true)
-    public List<Booking> searchBooking(@Param("keyword") String keyword);
+    @Query(value = "SELECT * FROM BOOKING WHERE status = 'Y' and booker_name LIKE :keyword", nativeQuery = true)
+    public List<Booking> searchBooking_Y(@Param("keyword") String keyword);
+
+    @Query(value = "SELECT * FROM BOOKING WHERE status = 'N' and booker_name LIKE :keyword", nativeQuery = true)
+    public List<Booking> searchBooking_N(@Param("keyword") String keyword);
 
     @Modifying
     @Transactional
@@ -32,5 +35,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId", nativeQuery = true)
     public Booking findMyBooking(@Param("memberId") Long memberId);
+
+    @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId", nativeQuery = true)
+    public Page<Booking> findAllBookingsWithMemberId(Pageable pageable, @Param("memberId") Long memberId);
 
 }

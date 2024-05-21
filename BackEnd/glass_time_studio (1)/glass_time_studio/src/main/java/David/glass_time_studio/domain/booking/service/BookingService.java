@@ -32,7 +32,6 @@ public class BookingService {
         return bookingRepository.findMyBooking(memberId);
     }
 
-
     // 예약 확정
     public void confirmBook(Long bookingId){
         bookingRepository.confirmRSVN(bookingId);
@@ -49,19 +48,31 @@ public class BookingService {
         Booking target = foundBooking.orElseThrow(()->new BusinessLogicException(ExceptionCode.BOOKING_NOT_FOUND));
         return target;
     }
+    // 회원 번호로 전체 예약 조회
+    public Page<Booking> findAllBookingsByMemberId(int page, int size, Long memberId){
+        return bookingRepository.findAllBookingsWithMemberId(PageRequest.of(page, size), memberId);
+    }
+
+
     // 전체 예약 조회
     public Page<Booking> findAllBookings(int page, int size){
         return bookingRepository.findAllBookings(PageRequest.of(page, size));
     }
-    // 예약자 검색
-    public List<Booking> searchByName(String keyword){
-        return bookingRepository.searchBooking("%" + keyword + "%");
+    // 예약자 검색 for Y
+    public List<Booking> searchByName_Y(String keyword){
+        return bookingRepository.searchBooking_Y("%" + keyword + "%");
     }
+
+    // 예약자 검색 for N
+    public List<Booking> searchByName_N(String keyword){
+        return bookingRepository.searchBooking_N("%" + keyword + "%");
+    }
+
     // 예약 수정
     public Booking updateBooking(Booking booking, Long bookingId){
         Booking target = findBooking(bookingId);
 
-        Long new_lectureId = booking.getLecture_Id();
+        Long new_lectureId = booking.getLectureId();
         LocalDate new_request_date = booking.getRequestDate();
         String new_lectureRequestTime = booking.getRequestTime();
         Long new_lecturePeopleNumber = booking.getPeopleNumber();
@@ -71,8 +82,8 @@ public class BookingService {
 
         boolean isUpdated = false;
 
-        if(new_lectureId != null && (target.getLecture_Id() != new_lectureId)){
-            target.setLecture_Id(new_lectureId);
+        if(new_lectureId != null && (target.getLectureId() != new_lectureId)){
+            target.setLectureId(new_lectureId);
             isUpdated = true;
         }
         if(new_request_date != null && (target.getRequestDate() != new_request_date)){

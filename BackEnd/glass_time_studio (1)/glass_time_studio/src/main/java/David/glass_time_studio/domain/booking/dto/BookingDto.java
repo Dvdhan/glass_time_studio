@@ -52,7 +52,7 @@ public class BookingDto {
     @Getter
     public static class Response{
         Long bookingId;
-        Long lecture_Id;
+        Long lectureId;
         String lectureName;
         LocalDate requestDate;
         String requestTime;
@@ -61,8 +61,7 @@ public class BookingDto {
         Long peopleNumber;
         String requestMessage;
         String status;
-        @NotNull
-        private Long memberId;
+        Long memberId;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime created_at;
 

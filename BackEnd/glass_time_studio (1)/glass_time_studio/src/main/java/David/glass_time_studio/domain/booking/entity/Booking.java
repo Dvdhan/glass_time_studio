@@ -19,7 +19,7 @@ public class Booking extends Auditable {
     private Long bookingId;
 
     @Column
-    private Long lecture_Id;
+    private Long lectureId;
 
     @Column
     private String lectureName;
