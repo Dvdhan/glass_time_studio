@@ -18,7 +18,8 @@ public interface BookingMapper {
 
     @Mappings({
             @Mapping(target = "created_at", source = "created_At"),
-            @Mapping(target = "modified_at", source = "modified_At")
+            @Mapping(target = "modified_at", source = "modified_At"),
+            @Mapping(source = "member.memberId", target = "memberId")
     })
     BookingDto.Response bookingToBookingDtoResponse (Booking booking);
 
