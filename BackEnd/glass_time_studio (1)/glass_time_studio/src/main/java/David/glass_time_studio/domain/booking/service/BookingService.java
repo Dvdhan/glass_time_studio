@@ -32,6 +32,9 @@ public class BookingService {
         return bookingRepository.findMyBooking(memberId);
     }
 
+    public Booking findBookingByMemberIdAndBookingId(Long memberId, Long bookingId){
+        return bookingRepository.findMyBookingByMemberIdAndBookingId(memberId, bookingId);
+    }
     // 예약 확정
     public void confirmBook(Long bookingId){
         bookingRepository.confirmRSVN(bookingId);
@@ -73,17 +76,22 @@ public class BookingService {
         Booking target = findBooking(bookingId);
 
         Long new_lectureId = booking.getLectureId();
+        String new_lecture_name = booking.getLectureName();
         LocalDate new_request_date = booking.getRequestDate();
         String new_lectureRequestTime = booking.getRequestTime();
-        Long new_lecturePeopleNumber = booking.getPeopleNumber();
         String new_booker_name = booking.getBookerName();
         String new_booker_mobile = booking.getMobile();
+        Long new_lecturePeopleNumber = booking.getPeopleNumber();
         String new_request_message = booking.getRequestMessage();
 
         boolean isUpdated = false;
 
         if(new_lectureId != null && (target.getLectureId() != new_lectureId)){
             target.setLectureId(new_lectureId);
+            isUpdated = true;
+        }
+        if(new_lecture_name != null && (target.getLectureName() != new_lecture_name)){
+            target.setLectureName(new_lecture_name);
             isUpdated = true;
         }
         if(new_request_date != null && (target.getRequestDate() != new_request_date)){

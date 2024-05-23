@@ -36,6 +36,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId", nativeQuery = true)
     public Booking findMyBooking(@Param("memberId") Long memberId);
 
+    @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId AND booking_Id = :bookingId", nativeQuery = true)
+    public Booking findMyBookingByMemberIdAndBookingId(@Param("memberId") Long memberId, @Param("bookingId") Long bookingId);
+
     @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId", nativeQuery = true)
     public Page<Booking> findAllBookingsWithMemberId(Pageable pageable, @Param("memberId") Long memberId);
 
