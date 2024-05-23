@@ -38,7 +38,7 @@
       margin-right: 15%;
       padding: 10px 0;
     }
-    
+
   </style>
 </head>
 <body>
@@ -47,7 +47,7 @@
   <form id="reservation_form">
     <fieldset>
       <legend>
-        <h1>&nbsp;&nbsp;예약하기&nbsp;&nbsp;</h1>
+        <h1>&nbsp;&nbsp;예약 수정 하기&nbsp;&nbsp;</h1>
       </legend>
 
       <div id="class_type">
@@ -57,7 +57,7 @@
 
         <div class="body">
           <select name="lectureId" id="class_type_select">
-            <option value="none">선택</option>
+            <option value="">변경할 수업 선택</option>
             <%
               List<Lecture> lectures = (List<Lecture>) request.getAttribute("lectures");
               if (lectures != null) {
@@ -76,7 +76,7 @@
         </div>
 
         <div class="body">
-          <input type="date" name="requestDate" id="rsvn_date_select"></input>
+          <input type="date" name="requestDate" id="rsvn_date_select" value="${param.requestDate}"></input>
         </div>
       </div>
 
@@ -87,7 +87,7 @@
 
         <div class="body">
           <select name="requestTime" id="rsvn_time_select">
-            <option value="none">선택</option>
+            <option value="${param.requestTime}">변경할 시간 선택</option>
             <option value="1100">[첫시작] 11:00 ~</option>
             <option value="1500">[마지막] 15:00 ~</option>
           </select>
@@ -96,11 +96,11 @@
 
       <div id="class_ppl">
         <div class="head">
-          예약 인원 수
+          참여 인원 수
         </div>
 
         <div class="body">
-          <input type="number" name="peopleNumber" id="rsvn_ppl_num">
+          <input type="number" name="peopleNumber" id="rsvn_ppl_num" value="${param.peopleNumber}">
         </div>
       </div>
 
@@ -110,7 +110,7 @@
         </div>
 
         <div class="body">
-          <input type="text" name="bookerName" id="rsvn_booker_name">
+          <input type="text" name="bookerName" id="rsvn_booker_name" value="${param.bookerName}">
         </div>
       </div>
 
@@ -118,9 +118,10 @@
         <div class="head">
           휴대폰 번호
         </div>
-        
+
         <div class="body">
-          <input type="text" name="mobile" id="rsvn_ppl_ph" placeholder=" - 제외, 휴대폰 번호만 입력해주세요.">
+          <input type="text" name="mobile" id="rsvn_ppl_ph" placeholder=" - 제외, 휴대폰 번호만 입력해주세요."
+          value="${param.mobile}">
         </div>
       </div>
 
@@ -130,13 +131,12 @@
         </div>
 
         <div class="body">
-          <textarea cols="30" rows="5" id="rsvn_message" name="requestMessage"></textarea>
+          <textarea cols="30" rows="5" id="rsvn_message" name="requestMessage">${param.requestMessage}</textarea>
         </div>
       </div>
 
       <div class="send">
-        <!-- <button type="submit">예약 요청하기</button> -->
-        <button onclick="rsvnBtn();" type="button">예약 요청하기</button>
+        <button onclick="rsvnBtn();" type="button">예약 내용 수정하기</button>
       </div>
     </fieldset>
 
@@ -154,7 +154,7 @@
         }
     %>
   </form>
-  
+
 
   <script>
     function rsvnBtn(){
@@ -166,11 +166,17 @@
       let requestMessage = document.querySelector('#rsvn_message').value;
       let mobile = document.querySelector('#rsvn_ppl_ph').value;
       let memberId = document.querySelector('#memberId').value;
+      let bookingId = "${param.bookingId}";
+
+      alert('bookingId: '+bookingId);
+      alert('memberId: '+memberId);
+      alert('lectureId: '+lectureId);
 
       let today = new Date();
       today.setHours(0, 0, 0, 0);
       let selectedDate = new Date(requestDate);
       selectedDate.setHours(0, 0, 0, 0);
+
 
       if(lectureId === "none"){
         alert('클래스 종류를 선택해주세요');
@@ -185,7 +191,7 @@
       }else if(mobile.length >11 || mobile.length <11){
         alert('휴대폰 번호를 확인해주세요.');
       }else if(!requestMessage){
-        alert('메세지를 작성해주세요'); 
+        alert('메세지를 작성해주세요');
       }else if(!memberId){
         alert('수업 예약을 위해서는 로그인이 필수 입니다.\n로그인 이후 다시 요청해주세요');
       }
@@ -200,8 +206,8 @@
           mobile: mobile,
           memberId: parseInt(memberId)
         });
-        fetch('/Booking', {
-            method: 'POST',
+        fetch('/Booking/'+bookingId, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -217,14 +223,14 @@
             })
         })
         .then(response => {
-            if(response.ok){
+            if(!response.ok){
                 return response.json();
             }
             throw new Error('Network response was not ok');
         })
         .then(data => {
             console.log("서버 응답: ", data);
-            alert('예약 요청이 완료되었습니다.\n일정 확인 후 연락드리겠습니다.');
+            alert('예약 수정이 완료되었습니다.\n일정 확인 후 연락드리겠습니다.');
             window.location.href = "/main";
         })
         .catch(error => {

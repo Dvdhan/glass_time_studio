@@ -6,6 +6,7 @@ import David.glass_time_studio.domain.booking.dto.BookingDto;
 import David.glass_time_studio.domain.booking.entity.Booking;
 import David.glass_time_studio.domain.booking.mapper.BookingMapper;
 import David.glass_time_studio.domain.booking.service.BookingService;
+import David.glass_time_studio.domain.lecture.entity.Lecture;
 import David.glass_time_studio.domain.lecture.mapper.LectureMapper;
 import David.glass_time_studio.domain.lecture.service.LectureService;
 import David.glass_time_studio.domain.member.entity.Member;
@@ -23,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -133,9 +135,6 @@ public class JSP_Booking_Controller {
 
         return "layouts/mypage/myBooking_detail";
     }
-
-
-
     // 마이페이지 -> 내 클래스 예약 살펴보기
     @GetMapping("/myBooking")
     public String seeMyBooking(Model model){
@@ -189,6 +188,35 @@ public class JSP_Booking_Controller {
             System.out.println("Pricipal Type: "+authentication.getPrincipal().getClass());
         }
         return "layouts/reservation/viewReservation";
+    }
+
+    @GetMapping("/update_myBooking_detail")
+    public String update_myBooking_detail(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+        if(authentication.getPrincipal() instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> responseAttributes = (Map<String, Object>) attributes.get("response");
+            String email = String.valueOf(responseAttributes.get("email"));
+            Member member = memberRepository.findMemberByEmail(email);
+            if(member != null){
+                model.addAttribute("member", member);
+
+                boolean isAdmin = "ADMIN".equals(member.getPermit());
+                model.addAttribute("isAdmin", isAdmin);
+            }else {
+                model.addAttribute("member",null);
+            }
+        }else {
+            System.out.println("Pricipal Type: "+authentication.getPrincipal().getClass());
+        }
+        List<Lecture> lectures = lectureService.getAllAvailableLectures();
+        model.addAttribute("lectures", lectures);
+
+        return "layouts/mypage/update_myBooking_detail";
     }
 
 }

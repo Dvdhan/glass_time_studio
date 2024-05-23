@@ -120,8 +120,22 @@ public class BookingController {
     public ResponseEntity patchBooking(@PathVariable("bookingId")@Positive Long bookingId,
                                        @RequestBody BookingDto.Patch patch){
         Booking booking = bookingMapper.bookingDtoPatchToBooking(patch);
+        Long lectureId = patch.getLectureId();
+        Lecture lecture = lectureService.findLecture(lectureId);
+        String lectureName = lecture.getLecture_Name();
+
+        log.info("bookingId : "+bookingId);
+        log.info("lectureId : "+lectureId);
+        log.info("lectureName : "+lectureName);
+        booking.setLectureId(lectureId);
+        booking.setLectureName(lectureName);
+
+        log.info("setlectureId의 결과: "+booking.getLectureId());
+        log.info("setLectureName의 결과: "+booking.getLectureName());
 
         Booking updatedBooking = bookingService.updateBooking(booking, bookingId);
+        log.info("업데이트 booking의 lectureId: "+updatedBooking.getLectureId());
+        log.info("업데이트 booking의 lectureName: "+updatedBooking.getLectureName());
         BookingDto.Response response = bookingMapper.bookingToBookingDtoResponse(updatedBooking);
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -194,6 +208,18 @@ public class BookingController {
 
         Map<String, String> responseMessage = new HashMap<>();
         responseMessage.put("message", "요청하신 '"+booking.getBookingId()+"'번 예약 삭제가 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
+    @DeleteMapping("/{memberId}/{bookingId}")
+    public ResponseEntity deleteBookingbyMember(@PathVariable("memberId") @Positive Long memberId,
+                                                @PathVariable("bookingId") @Positive Long bookingId){
+        Booking booking = bookingService.findBookingByMemberIdAndBookingId(memberId, bookingId);
+        bookingService.deleteBooking(booking);
+
+        String bookerName = booking.getBookerName();
+
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "요청하신 '"+bookerName+"'님의 "+booking.getBookingId()+"'번 예약 삭제가 완료되었습니다.");
         return ResponseEntity.ok(responseMessage);
     }
 }
