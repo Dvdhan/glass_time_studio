@@ -70,3 +70,9 @@ jwt:
 mail:
   address:
     admin: han2041126@gmail.com
+
+navercloud:
+  accessKey: ${NAVER_CLOUD_ACCESS_KEY}
+  secretKey: ${NAVER_CLOUD_SECRET_KEY}
+  bucketName: "glass.time.studio"
+  region: "KR"

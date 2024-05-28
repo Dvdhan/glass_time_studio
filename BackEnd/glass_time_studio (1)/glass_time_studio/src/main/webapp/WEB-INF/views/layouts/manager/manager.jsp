@@ -42,6 +42,7 @@
       <button style="display: block; margin:20px auto;" type="button"><a href="/announcement">공지사항 관리</a></button>
       <button style="display: block; margin:20px auto;" type="button"><a href="#">매출 확인</a></button>
       <button style="display: block; margin:20px auto;" type="button"><a href="#">회원 관리</a></button>
+      <button style="display: block; margin:20px auto;" type="button"><a href="/photo">사진 업로드 페이지</a></button>
       <br><br><br>
     </fieldset>
   </div>

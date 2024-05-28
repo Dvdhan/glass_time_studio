@@ -37,9 +37,6 @@ dependencies {
 	// jsp 추가
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'javax.servlet:jstl:1.2'
-//	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:1.2.7'
-//	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:1.2.7'
-
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
@@ -55,6 +52,9 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	implementation 'com.google.code.gson:gson'
+
+	// AWS SDK for SE : 네이버 클라우드
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.1000'
 }
 
 tasks.named('test') {
