@@ -68,7 +68,6 @@
 <body>
   <%@ include file="../../navigation.jsp" %>
 
-
   <div style="text-align: center;">
     <h1>글라스 제품</h1>
     <br><br><span style="font-size: 1.3em;">✔ 구매 전, 꼭 읽어주세요.</span><br><br>
