@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="David.glass_time_studio.domain.product.entity.Product" %>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -33,6 +34,34 @@
       padding: 0 10px;
       text-align: left;
     }
+    .class_attribute{
+        width: 25em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: auto;
+        margin-top: 0.5em;
+    }
+    .img{
+        width: 25em;
+        height: 15em;
+        margin: auto;
+        display: block;
+        margin-top: 0.5em;
+    }
+    button{
+        margin: 0.5em;
+    }
+    #product_explanation{
+        width: 35em;
+        margin: auto;
+    }
+    #product_word{
+        width: 25em;
+        margin: auto;
+        margin-top: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -113,8 +142,76 @@
     </table>
 
     <br><br><br><div class="bar"></div><br>
+    <br><div id="product_explanation">
+        <fieldset>
+            <legend>
+            <h1>&nbsp;&nbsp;제품 상세 설명&nbsp;&nbsp;</h1>
+            </legend>
 
-  </div>
+            <div class="class_attribute">
+            <span>[제품 이름]</span>
+            <span>${product.productName}</span>
+            </div>
+
+            <div class="class_attribute">
+            <span>[제품 가격]</span>
+            <span>${product.productPrice}</span>
+            </div>
+
+            <div class="class_attribute">
+            <span>[제품 재고량]</span>
+            <span>${product.productQuantity}</span>
+            </div>
+
+            <div class="class_attribute">
+            <span>[제품 상태]</span>
+            <span>${product.productStatus}</span>
+            </div>
+
+            <div class="class_attribute">
+            <span>[제품 설명]</span>
+            </div>
+            <div id="product_word">
+                <br>
+                <span>${product.productDescription}</span>
+            </div>
+
+            <div class="class_attribute">
+            <span>[제품 대표 사진]</span>
+            </div>
+            <img class="img" src="${product.mainPhotoUrl}">
+
+            <div id="productPhotoUrls">
+                <%
+                Product product = (Product) request.getAttribute("product");
+                for (int i = 1; i <= 10; i++) {
+                    String url = null;
+                    switch (i) {
+                        case 1: url = product.getPhotoUrl_1(); break;
+                        case 2: url = product.getPhotoUrl_2(); break;
+                        case 3: url = product.getPhotoUrl_3(); break;
+                        case 4: url = product.getPhotoUrl_4(); break;
+                        case 5: url = product.getPhotoUrl_5(); break;
+                        case 6: url = product.getPhotoUrl_6(); break;
+                        case 7: url = product.getPhotoUrl_7(); break;
+                        case 8: url = product.getPhotoUrl_8(); break;
+                        case 9: url = product.getPhotoUrl_9(); break;
+                        case 10: url = product.getPhotoUrl_10(); break;
+                    }
+                    if (url != null) { %>
+                        <div class="class_attribute">
+                            <span>[제품 사진 <%= i %>]</span>
+                        </div>
+                        <img class="img" src="<%= url %>">
+                    <% }
+                }
+                %>
+            </div>
+        </fieldset>
+    </div>
+        <button onclick="purchase()" type="button">제품 구매하기</button>
+        <button onclick="addBasket" type="button">장바구니 추가</button>
+    </div><br>
   
 </body>
 </html>

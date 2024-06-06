@@ -19,13 +19,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class NaverCloudService {
 
     private final AmazonS3 s3Client;
-
     @Value("${navercloud.bucketName}")
     private String bucketName;
 
@@ -34,7 +35,7 @@ public class NaverCloudService {
                              @Value("${navercloud.region}") String region){
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
 
-        String endpoint = String.format("https://kr.object.ncloudstorage.com");
+        String endpoint = "https://kr.object.ncloudstorage.com";
         this.s3Client = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
@@ -45,17 +46,31 @@ public class NaverCloudService {
         log.info("N_Secret_Key: "+secretKey);
         log.info("N_Region: "+region);
     }
+    public List<String> uploadFiles(List<MultipartFile> files) throws IOException {
+        return files.stream()
+                .map(file -> {
+                    try {
+                        return uploadFile(file);
+                    }catch (IOException e){
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
     public String uploadFile(MultipartFile file) throws IOException{
         File tempFile = convertMultipartFileToFile(file);
         String fileName = generateFileName(file.getOriginalFilename());
+        String objectKey = "product/" + fileName;
 
-        s3Client.putObject(new PutObjectRequest(bucketName, fileName, tempFile)
+        s3Client.putObject(new PutObjectRequest(bucketName, objectKey, tempFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
         tempFile.delete();
 
-        String fileUrl = s3Client.getUrl(bucketName, fileName).toString();
+        String fileUrl = s3Client.getUrl(bucketName, objectKey).toString();
 
+        log.info("(uploadFile) 사진 url: "+fileUrl);
         // 여기에 productRepository에 저장하도록 코드 작성 예정.
         return fileUrl;
     }
