@@ -16,7 +16,7 @@
     <li><a href="/main">홈으로</a></li>
     <li><a href="/announcement">이벤트/공지사항</a></li>
     <li><a href="/class">클래스</a></li>
-    <li><a href="/product">제품 구매하기</a></li>
+    <li><a href="/productList">제품 구매하기</a></li>
     <li><a href="/review">수강생 후기</a></li>
     <% if (request.getAttribute("isLoggedIn") != null && (Boolean) request.getAttribute("isLoggedIn")) { %>
         <% if ((Boolean) request.getAttribute("isAdmin")) { %>
