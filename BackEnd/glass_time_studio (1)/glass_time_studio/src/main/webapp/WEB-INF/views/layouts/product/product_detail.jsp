@@ -60,6 +60,7 @@
         width: 25em;
         margin: auto;
         margin-top: 10px;
+        margin-bottom: 1em;
     }
 
   </style>

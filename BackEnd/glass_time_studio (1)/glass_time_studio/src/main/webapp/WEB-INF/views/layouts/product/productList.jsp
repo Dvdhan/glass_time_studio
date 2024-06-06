@@ -39,7 +39,7 @@
       color: blue;
     }
     fieldset{
-      height: 25em;
+      height: 27em;
     }
     #pagination {
         text-align: center;
@@ -54,6 +54,10 @@
         width: 20em;
         text-align: center;
         margin-bottom: 2em;
+    }
+    .exp{
+        display: block;
+        margin-top: 20px;
     }
   </style>
 </head>
@@ -110,10 +114,14 @@ function updateDiv(products) {
         target +=
             "<fieldset>"+
             "<img src='" + product.mainPhotoUrl + "'>"+
-            "<p>제품명 : <span id='s_product_title'>" + product.productName + "</span></p>" +
-            "<p>가격 : <span id='s_product_price'>" + product.productPrice + " 원</span></p>" +
-            "<p>재고 : <span id='s_product_quantity'>" + product.productQuantity + "</span></p>" +
-            "<p>판매 상태 : <span id='s_product_status'>" + product.productStatus + "</span></p>" +
+            "<span>[제품명]</span>" +
+            "<div>" + product.productName + "</div>" +
+            "<span class='exp'>[가격]</span>" +
+            "<div>" + product.productPrice + " 원</div>" +
+            "<span class='exp'>[재고]</span>" +
+            "<div>" + product.productQuantity + "</div>" +
+            "<span class='exp'>[판매 상태]</span>" +
+            "<div>" + product.productStatus + "</div>" +
             "<div class='buttons'>"+
             "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
             "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
