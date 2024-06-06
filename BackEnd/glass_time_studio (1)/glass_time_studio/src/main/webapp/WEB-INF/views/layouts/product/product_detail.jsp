@@ -60,13 +60,13 @@
         width: 25em;
         margin: auto;
         margin-top: 10px;
+        margin-bottom: 1em;
     }
 
   </style>
 </head>
 <body>
   <%@ include file="../../navigation.jsp" %>
-
 
   <div style="text-align: center;">
     <h1>글라스 제품</h1>

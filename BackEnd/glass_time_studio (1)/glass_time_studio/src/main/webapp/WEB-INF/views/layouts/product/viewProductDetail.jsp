@@ -43,7 +43,7 @@
         margin: 0.5em;
     }
     .class_attribute{
-        width: 14em;
+        width: 25em;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -51,16 +51,17 @@
         margin-top: 0.5em;
     }
     .img{
-        width: 14em;
-        height: 6em;
+        width: 25em;
+        height: 15em;
         margin: auto;
         display: block;
         margin-top: 0.5em;
     }
     #product_word{
-        width: 14em;
+        width: 25em;
         margin: auto;
         margin-top: 10px;
+        margin-bottom: 1em;
     }
   </style>
 </head>
@@ -74,34 +75,34 @@
       </legend>
 
       <div class="class_attribute">
-      <span>제품 이름</span>
+      <span>[제품 이름]</span>
       <span>${product.productName}</span>
       </div>
 
       <div class="class_attribute">
-      <span>제품 가격</span>
+      <span>[제품 가격]</span>
       <span>${product.productPrice}</span>
       </div>
 
       <div class="class_attribute">
-      <span>제품 재고량</span>
+      <span>[제품 재고량]</span>
       <span>${product.productQuantity}</span>
       </div>
 
       <div class="class_attribute">
-      <span>제품 상태</span>
+      <span>[제품 상태]</span>
       <span>${product.productStatus}</span>
       </div>
 
       <div class="class_attribute">
-      <span>제품 설명</span>
+      <span>[제품 설명]</span>
       </div>
-      <div id="product_word">
+      <div id="product_word"><br>
           <span>${product.productDescription}</span>
       </div>
 
       <div class="class_attribute">
-      <span>제품 대표 사진</span>
+      <span>[제품 대표 사진]</span>
       </div>
       <img class="img" src="${product.mainPhotoUrl}">
 
@@ -124,7 +125,7 @@
             }
             if (url != null) { %>
                 <div class="class_attribute">
-                    <span>제품 사진 <%= i %></span>
+                    <span>[제품 사진 <%= i %>]</span>
                 </div>
                 <img class="img" src="<%= url %>">
             <% }
