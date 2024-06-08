@@ -16,9 +16,10 @@ import java.time.LocalDate;
 public class Booking extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bookingId")
     private Long bookingId;
 
-    @Column
+    @Column(name = "lectureId")
     private Long lectureId;
 
     @Column
