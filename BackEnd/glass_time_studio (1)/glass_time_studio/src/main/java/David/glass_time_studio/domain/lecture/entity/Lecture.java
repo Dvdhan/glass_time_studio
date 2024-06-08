@@ -13,6 +13,7 @@ public class Lecture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lecture_Id")
     private Long lecture_Id;
     @Column
     private String lecture_Name;

@@ -5,28 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 public class BasketDto {
 
     @AllArgsConstructor
-    @NoArgsConstructor
     @Setter
     @Getter
     public static class Post{
-
+        Long memberId;
+        Long productId;
     }
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Setter
-    @Getter
-    public static class Patch{
-
-    }
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Setter
     @Getter
     public static class Response{
-
+        Long basketId;
+        Long memberId;
+        String memberName;
+        Long productId;
+        String productName;
     }
 }

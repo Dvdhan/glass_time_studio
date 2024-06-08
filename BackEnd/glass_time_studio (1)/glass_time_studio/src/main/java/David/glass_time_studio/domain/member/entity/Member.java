@@ -1,5 +1,6 @@
 package David.glass_time_studio.domain.member.entity;
 
+import David.glass_time_studio.domain.basket.entity.Basket;
 import David.glass_time_studio.domain.booking.entity.Booking;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "memberId")
     private Long memberId;
     @Column
     private String memberName;
@@ -41,6 +43,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Booking> bookings = new ArrayList<>();
+
+//    @OneToOne(mappedBy = "member")
+//    private Basket basket;
 
     public Member(String email) {
         this.email = email;

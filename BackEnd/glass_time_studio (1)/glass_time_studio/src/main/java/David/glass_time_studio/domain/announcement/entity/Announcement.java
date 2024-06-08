@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 public class Announcement extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "announcementId")
     private Long announcement_Id;
-    @Column
+    @Column(name = "announcementTitle")
     private String announcement_Title;
-    @Column(length = 100000)
+    @Column(length = 100000, name = "announcementContent")
     private String announcement_Content;
 }

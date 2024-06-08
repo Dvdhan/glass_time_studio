@@ -21,13 +21,14 @@
       margin: auto;
     }
     .buttons{
-      margin-top: 2em;
+      margin-top: 1em;
       text-align: center;
     }
     fieldset img{
       width: 100%;
       height: 350px;
       object-fit: contain;
+      margin-bottom: 0.7em;
     }
     p{
       text-align: center;
@@ -125,11 +126,14 @@ function updateDiv(products) {
             "<div class='buttons'>"+
             "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
             "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
-            "<button><a class='detail' href='#'>장바구니 담기</a></button>" +
+            "<button><a class='detail' href='#' onclick='alert_show("+product.productId+")'>장바구니 담기</a></button>" +
             "</div>" +
             "</fieldset>";
     });
     product_div.innerHTML = target;
+}
+function alert_show(target){
+    alert('productId: '+target);
 }
 
 function search_keyword() {
@@ -174,7 +178,7 @@ function search_keyword() {
                     "<div class='buttons'>"+
                     "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
                     "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
-                    "<button><a class='detail' href='#'>장바구니 담기</a></button>" +
+                    "<button><a class='detail' onclick='alert_show()'>장바구니담기</a></button>" +
                     "</div>" +
                     "</fieldset>";
             });

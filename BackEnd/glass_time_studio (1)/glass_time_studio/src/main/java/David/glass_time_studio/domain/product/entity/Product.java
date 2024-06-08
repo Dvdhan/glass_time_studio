@@ -1,10 +1,12 @@
 package David.glass_time_studio.domain.product.entity;
 
+import David.glass_time_studio.domain.basketProduct.entity.BasketProduct;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -14,6 +16,7 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productId")
     private Long productId;
     @Column
     private String productName;
@@ -27,12 +30,6 @@ public class Product {
     private String mainPhotoUrl;
     @Column
     private String productStatus;
-
-//    @ElementCollection
-//    @CollectionTable(name = "product_photo_urls", joinColumns = @JoinColumn(name = "product_id"))
-//    @Column(name = "photo_url")
-//    private List<String> productPhotoUrls;
-
     @Column
     private String photoUrl_1;
     @Column
@@ -53,6 +50,9 @@ public class Product {
     private String photoUrl_9;
     @Column
     private String photoUrl_10;
+
+    @OneToMany(mappedBy = "product")
+    private List<BasketProduct> basketProducts = new ArrayList<>();
 
 
     public Product(Long productId, String productName, String productDescription,
