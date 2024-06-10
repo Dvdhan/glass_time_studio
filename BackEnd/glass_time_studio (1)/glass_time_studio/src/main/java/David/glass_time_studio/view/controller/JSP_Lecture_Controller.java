@@ -14,6 +14,7 @@ import David.glass_time_studio.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +40,8 @@ public class JSP_Lecture_Controller {
     private BookingService bookingService;
     private BookingMapper bookingMapper;
 
+    @Value("${app.api.endpoint}")
+    private String apiEndPoint;
 
     public JSP_Lecture_Controller(MemberRepository memberRepository,
                         MemberService memberService,
@@ -62,6 +65,7 @@ public class JSP_Lecture_Controller {
     @GetMapping("/lecture/{lecture_Id}")
     public String findLecture(@PathVariable("lecture_Id")@Positive Long lecture_Id,
                               Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Lecture lecture = lectureService.findLecture(lecture_Id);
         LectureDto.Response response = lectureMapper.lectureToLectureDtoResponse(lecture);
         model.addAttribute("lecture", response);
@@ -94,6 +98,7 @@ public class JSP_Lecture_Controller {
     // 홈페이지 -> 클래스 클릭
     @GetMapping("/class")
     public String load_class(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -121,6 +126,7 @@ public class JSP_Lecture_Controller {
     // 클래스 -> 클래스 예약 생성하기
     @GetMapping("/reservation")
     public String to_reservation(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -165,6 +171,7 @@ public class JSP_Lecture_Controller {
     // 관리자 -> 클래스 추가하기
     @GetMapping("/createLecture")
     public String createLecture(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -192,6 +199,7 @@ public class JSP_Lecture_Controller {
     // 관리자 -> 클래스 -> 클래스 수정하기
     @GetMapping("/viewLecture")
     public String viewLecture(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -219,6 +227,7 @@ public class JSP_Lecture_Controller {
     // 관리자 -> 클래스 수정하기 -> 개별 클래스 클릭 -> 클래스 수정하기
     @GetMapping("/updateLecture")
     public String updateLecture(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);

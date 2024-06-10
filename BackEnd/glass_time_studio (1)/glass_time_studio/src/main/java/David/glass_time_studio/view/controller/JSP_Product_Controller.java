@@ -17,6 +17,7 @@ import David.glass_time_studio.domain.product.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,8 @@ public class JSP_Product_Controller {
     private ProductService productService;
     private ProductMapper productMapper;
 
+    @Value("${app.api.endpoint}")
+    private String apiEndPoint;
 
     public JSP_Product_Controller(MemberRepository memberRepository,
                         MemberService memberService,
@@ -68,6 +71,7 @@ public class JSP_Product_Controller {
 
     @GetMapping("/productList")
     public String to_product(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -95,6 +99,7 @@ public class JSP_Product_Controller {
     @GetMapping("/product_detail/{productId}")
     public String product_detail(@PathVariable("productId")@Positive Long productId,
             Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
 
         Product product = productService.findProduct(productId);
         model.addAttribute("product", product);
@@ -125,6 +130,7 @@ public class JSP_Product_Controller {
 
     @GetMapping("/productManager")
     public String productManager(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -151,6 +157,7 @@ public class JSP_Product_Controller {
     }
     @GetMapping("/createProduct")
     public String createProduct(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -178,6 +185,7 @@ public class JSP_Product_Controller {
     @GetMapping("/product/{productId}")
     public String viewProductDetail(@PathVariable("productId")@Positive Long productId,
                                     Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Product product = productService.findProduct(productId);
         log.info("전달받은 제품 아이디: "+productId+" DB에서 찾은 제품 아이디: "+product.getProductId());
         ProductDto.Response response = productMapper.productToProductDtoResponse(product);
@@ -211,6 +219,7 @@ public class JSP_Product_Controller {
     @GetMapping("/patchProduct/{productId}")
     public String patchProduct(@PathVariable("productId")@Positive Long productId, Model model, HttpServletRequest request){
 
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Product product = productService.findProduct(productId);
 
         model.addAttribute("product", product);

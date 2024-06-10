@@ -18,4 +18,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
 
     @Query(value = "SELECT * FROM BASKET ORDER BY basket_id", nativeQuery = true)
     public Page<Basket> findAllBasket(Pageable pageable);
+
+    @Query(value = "SELECT * FROM BASKET WHERE member_id = :memberId", nativeQuery = true)
+    public Page<Basket> findAllMyBasket(Pageable pageable, @Param("memberId")Long memberId);
 }

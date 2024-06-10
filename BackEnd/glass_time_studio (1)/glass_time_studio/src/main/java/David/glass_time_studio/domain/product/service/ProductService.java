@@ -35,9 +35,12 @@ public class ProductService {
 
 
     public Product findProduct(Long productId){
-        Optional<Product> findProduct = productRepository.findById(productId);
-        Product foundProduct = findProduct.orElseThrow(()->new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND));
-        return foundProduct;
+        Product product = productRepository.findProductByProductId(productId);
+        if(product == null){
+            throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
+        }else{
+            return product;
+        }
     }
     public Page<Product> findAllProduct(int page, int size){
         return productRepository.findAllProduct(PageRequest.of(page, size));

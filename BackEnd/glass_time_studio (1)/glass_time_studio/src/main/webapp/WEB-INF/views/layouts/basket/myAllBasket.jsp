@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products</title>
+  <title>내 장바구니 내역</title>
   <link rel="stylesheet" href="../../css/background_black.css">
 
   <style>
@@ -84,57 +84,91 @@ document.addEventListener('DOMContentLoaded', function() {
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
     currentPage = pageNumber;
     var apiEndPoint = "${apiEndPoint}";
-    fetch(apiEndPoint+'/product/all?page='+pageNumber+'&size=9')
-    .then(response => response.json())
-    .then(data => {
-        console.log('Recieved data: '+data);
-        let products = data.data;
-        updateDiv(products);
-        createPagination(data.pageinfo.totalPages, pageNumber);
+    fetch(apiEndPoint+'/basket/all/${member.memberId}?page='+pageNumber+'&size=9')
+    .then(response => {
+        return response.json();
     })
-    .catch(error => console.error('Failed to load page data: ', error));
+    .then(data => {
+        // 응답의 message 부분.
+        let baskets = data.data;
+        if(data.message != null && data.message == "찾으시는 장바구니 내역이 없습니다."){
+            updateDiv(baskets, apiEndPoint);
+        }
+        else {
+            updateDiv(baskets, apiEndPoint);
+            createPagination(data.pageinfo.totalPages, pageNumber);
+        }
+    })
+    .catch(error => {
+        console.error('Failed to load page data: ', error);
+    });
 }
-// 페이지네이션 버튼 생성
-function createPagination(totalPages, currentPage) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = ''; // 기존 페이징 버튼 제거
-    for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement('button');
-        button.style.margin = '2px';
-        button.innerText = i;
-        button.className = (i === currentPage) ? 'active' : ''; // 현재 페이지를 표시
-        button.onclick = () => loadPage(i);
-        pagination.appendChild(button);
-    }
-}
-function updateDiv(products) {
+function updateDiv(baskets, apiEndPoint) {
+    console.log('baskets: '+JSON.stringify(baskets));
+
     const product_div = document.querySelector("#product_list");
     const empty_letter = document.querySelector("#empty_letter");
-    if (products.length === 0) {
-        empty_letter.innerHTML = "<h1>죄송합니다<br>현재 판매 중인 제품이 없습니다.</h1>";
+    if (!baskets || baskets.length === 0) {
+        product_div.innerHTML = '';
+        empty_letter.innerHTML = "<h1>장바구니 내역이 없습니다.</h1>";
         return;
     }
-    let target ='';
-    products.forEach(product => {
-        target +=
-            "<fieldset>"+
-            "<img src='" + product.mainPhotoUrl + "'>"+
-            "<span>[제품명]</span>" +
-            "<div>" + product.productName + "</div>" +
-            "<span class='exp'>[가격]</span>" +
-            "<div>" + product.productPrice + " 원</div>" +
-            "<span class='exp'>[재고]</span>" +
-            "<div>" + product.productQuantity + "</div>" +
-            "<span class='exp'>[판매 상태]</span>" +
-            "<div>" + product.productStatus + "</div>" +
-            "<div class='buttons'>"+
+
+    empty_letter.innerHTML = ''; // 장바구니 데이터가 있을 때 empty_letter 초기화
+
+    Promise.allSettled(baskets.map(basket => {
+        return fetch(apiEndPoint + "/product/view/"+basket.productId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error.message);
+                });
+            }
+            return response.json().then(product => {
+                return {basket, product};
+            });
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    }))
+    .then(results => {
+        let target = '';
+        results.forEach(result => {
+            if (result.status === "fulfilled") {
+                const { basket, product } = result.value;
+                target += createProductHTML(basket, product);
+            } else {
+                console.error('Product fetch failed:', result.reason);
+            }
+        });
+        product_div.innerHTML = target;
+    });
+}
+
+function createProductHTML(basket, product) {
+    var memberId = "${member.memberId}";
+    return "<fieldset>" +
+        "<img src='" + product.mainPhotoUrl + "' alt='Product Image'>" +
+        "<span>[제품명]</span>" +
+        "<div>" + product.productName + "</div>" +
+        "<span class='exp'>[가격]</span>" +
+        "<div>" + product.productPrice + " 원</div>" +
+        "<span class='exp'>[재고]</span>" +
+        "<div>" + product.productQuantity + "</div>" +
+        "<span class='exp'>[판매 상태]</span>" +
+        "<div>" + product.productStatus + "</div>" +
+        "<div class='buttons'>" +
             "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
             "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
-            "<button><a class='detail' href='#' onclick='addToBasket(" + ${member.memberId} + "," + product.productId + ")'>장바구니 담기</a></button>" +
-            "</div>" +
-            "</fieldset>";
-    });
-    product_div.innerHTML = target;
+            "<button><a class='detail' href='#' onclick='deleteFromBasket(" + memberId + ", " + basket.basketId + ")'>장바구니 삭제</a></button>" +
+        "</div>" +
+        "</fieldset>";
 }
 function addToBasket(memberId, productId ){
     var apiEndPoint = "${apiEndPoint}";
@@ -165,6 +199,47 @@ function addToBasket(memberId, productId ){
         console.error('문제가 발생했습니다: ', error);
         alert(error.message);
     });
+}
+function deleteFromBasket(memberId, basketId){
+    console.log('회원ID: '+memberId);
+    console.log('장바구니ID: '+basketId);
+    var apiEndPoint = "${apiEndPoint}";
+    if(confirm('해당 제품을 장바구니에서 삭제하시겠습니까?')){
+        fetch(apiEndPoint+"/basket/"+memberId+"/"+basketId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            return response.json().then(data => {
+              if (!response.ok){
+                  throw new Error(data.message);
+              }
+              return data;
+            });
+        })
+        .then(data => {
+            alert(data.message);
+            window.location.href = '/myAllBasket';
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    }
+}
+// 페이지네이션 버튼 생성
+function createPagination(totalPages, currentPage) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; // 기존 페이징 버튼 제거
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.style.margin = '2px';
+        button.innerText = i;
+        button.className = (i === currentPage) ? 'active' : ''; // 현재 페이지를 표시
+        button.onclick = () => loadPage(i);
+        pagination.appendChild(button);
+    }
 }
 
 function search_keyword() {

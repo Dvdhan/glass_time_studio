@@ -14,6 +14,7 @@ import David.glass_time_studio.global.advice.ExceptionCode;
 import David.glass_time_studio.naverCloud.controller.NaverCloudController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -93,6 +94,14 @@ public class ProductController {
         Product updatedProduct = productService.updateProduct(product, productId);
         ProductDto.Response response = productMapper.productToProductDtoResponse(updatedProduct);
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/view/{productId}")
+    public ResponseEntity viewProduct(@PathVariable("productId")@Positive Long productId) throws Exception{
+        log.info("View ProductId: "+productId);
+        Product product = productService.findProduct(productId);
+        ProductDto.Response response = productMapper.productToProductDtoResponse(product);
+        return ResponseEntity.ok(response);
     }
 
     // 단일 상품 삭제

@@ -92,4 +92,22 @@ public class BasketController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    // 내 장바구니 내역 전체 조회
+    @GetMapping("/all/{memberId}")
+    public ResponseEntity findAllMyBasket(@Positive @RequestParam int page,
+                                        @Positive @RequestParam int size,
+                                          @PathVariable("memberId")@Positive Long memberId) {
+        Page<Basket> baskets = basketService.findAllMyBasket(page-1, size, memberId);
+
+        PageInfo pageInfo = new PageInfo(
+                baskets.getNumber(),
+                baskets.getSize(),
+                baskets.getTotalElements(),
+                baskets.getTotalPages());
+        List<Basket> basketList = baskets.getContent();
+        List<BasketDto.Response> responses = basketMapper.basketsToBasketDtoResponse(basketList);
+
+        return new ResponseEntity(
+                new MultiResponse<>(responses, pageInfo),HttpStatus.OK);
+    }
 }

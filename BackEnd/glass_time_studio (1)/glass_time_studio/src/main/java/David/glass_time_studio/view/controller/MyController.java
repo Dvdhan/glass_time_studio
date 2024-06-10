@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +46,8 @@ public class MyController {
     private BookingService bookingService;
     private BookingMapper bookingMapper;
 
+    @Value("${app.api.endpoint}")
+    private String apiEndPoint;
 
     public MyController(MemberRepository memberRepository,
                         MemberService memberService,
@@ -66,6 +69,7 @@ public class MyController {
     }
     @GetMapping("/main")
     public String index(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -91,6 +95,7 @@ public class MyController {
     }
     @GetMapping("/review")
     public String to_review(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -116,6 +121,7 @@ public class MyController {
     }
     @GetMapping("/mypage")
     public String to_mypage(Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -151,6 +157,7 @@ public class MyController {
     }
     @GetMapping("/updateInfo")
     public String update_Info(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -177,6 +184,7 @@ public class MyController {
 
     @GetMapping("/manager")
     public String managerPage(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -203,6 +211,7 @@ public class MyController {
 
     @GetMapping("/photo")
     public String photoUpload(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);

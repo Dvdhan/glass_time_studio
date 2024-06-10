@@ -67,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
     currentPage = pageNumber;
-    fetch('http://localhost:8080/product/all?page='+pageNumber+'&size=10')
+    var apiEndPoint = "${apiEndPoint}";
+    fetch(apiEndPoint+'/product/all?page='+pageNumber+'&size=10')
     .then(response => response.json())
     .then(data => {
         console.log('Recieved data: '+data);
