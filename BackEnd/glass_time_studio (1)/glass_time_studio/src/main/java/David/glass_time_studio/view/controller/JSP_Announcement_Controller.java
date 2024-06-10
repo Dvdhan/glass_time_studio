@@ -14,6 +14,7 @@ import David.glass_time_studio.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +39,8 @@ public class JSP_Announcement_Controller {
     private BookingService bookingService;
     private BookingMapper bookingMapper;
 
-
+    @Value("${app.api.endpoint}")
+    private String apiEndPoint;
     public JSP_Announcement_Controller(MemberRepository memberRepository,
                         MemberService memberService,
                         AnnouncementService announcementService,
@@ -62,6 +64,7 @@ public class JSP_Announcement_Controller {
     @GetMapping("/Announcement/{announcement_Id}")
     public String findAnnouncement(@PathVariable("announcement_Id")@Positive Long announcement_id,
                                    Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Announcement announcement = announcementService.findAnnouncement(announcement_id);
         AnnouncementDto.Response response = announcementMapper.announcementToAnnouncementDtoResponse(announcement);
         model.addAttribute("announcement", response);
@@ -94,6 +97,7 @@ public class JSP_Announcement_Controller {
     // 관리자 -> 이벤트/공지 작성하기
     @GetMapping("/announcement/write")
     public String write_annoucement(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -122,6 +126,7 @@ public class JSP_Announcement_Controller {
     // 이벤트/공지사항 -> 전체 공지보기
     @GetMapping("/announcement")
     public String eventAnnouncement(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -149,6 +154,7 @@ public class JSP_Announcement_Controller {
     // 관리자 -> 이벤트/공지 수정하기
     @GetMapping("/updateAnnouncement")
     public String update_Announcement(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);

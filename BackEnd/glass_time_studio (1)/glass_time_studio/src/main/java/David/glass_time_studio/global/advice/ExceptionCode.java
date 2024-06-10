@@ -13,7 +13,7 @@ public enum ExceptionCode {
     BOOKING_NOT_FOUND(400, "찾으시는 예약이 존재하지 않습니다."),
     BASKET_NOT_FOUND(400, "찾으시는 장바구니 내역이 없습니다."),
     ALREADY_EXISTS(400, "이미 장바구니에 등록되어 있습니다."),
-    BASKET_MEMBER_ID_AND_MEMBER_ID_IS_DIFFERENT(400, "요청하신 장바구니의 아이디와 요청한 회원이 다릅니다.")
+    BASKET_MEMBER_ID_AND_MEMBER_ID_IS_DIFFERENT(400, "해당 장바구니 제품이 속한 회원 아이디와 삭제 요청한 회원이 다릅니다.")
     ;
 
     @Getter

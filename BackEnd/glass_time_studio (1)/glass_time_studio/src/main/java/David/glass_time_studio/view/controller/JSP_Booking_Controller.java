@@ -15,6 +15,7 @@ import David.glass_time_studio.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +40,8 @@ public class JSP_Booking_Controller {
     private BookingService bookingService;
     private BookingMapper bookingMapper;
 
+    @Value("${app.api.endpoint}")
+    private String apiEndPoint;
 
     public JSP_Booking_Controller(MemberRepository memberRepository,
                         MemberService memberService,
@@ -62,6 +65,7 @@ public class JSP_Booking_Controller {
     @GetMapping("/Booking/{bookingId}")
     public String findBooking(@PathVariable("bookingId")@Positive Long bookingId,
                               Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Booking booking = bookingService.findBooking(bookingId);
         Long memberId = booking.getMember().getMemberId();
         log.info("예약정보 - 회원아이디: "+memberId);
@@ -100,6 +104,7 @@ public class JSP_Booking_Controller {
     @GetMapping("/Booking/myBooking/{bookingId}")
     public String findMyBooking(@PathVariable("bookingId")@Positive Long bookingId,
                               Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Booking booking = bookingService.findBooking(bookingId);
         Long memberId = booking.getMember().getMemberId();
         log.info("예약정보 - 회원아이디: "+memberId);
@@ -138,7 +143,7 @@ public class JSP_Booking_Controller {
     // 마이페이지 -> 내 클래스 예약 살펴보기
     @GetMapping("/myBooking")
     public String seeMyBooking(Model model){
-
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -166,6 +171,7 @@ public class JSP_Booking_Controller {
     // 관리자페이지 ->  수업 예약 확인
     @GetMapping("/viewReservation")
     public String viewLectureReservation(Model model, HttpServletRequest request){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);
@@ -192,6 +198,7 @@ public class JSP_Booking_Controller {
 
     @GetMapping("/update_myBooking_detail")
     public String update_myBooking_detail(Model model){
+        model.addAttribute("apiEndPoint", apiEndPoint);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
         model.addAttribute("isLoggedIn", isLoggedIn);

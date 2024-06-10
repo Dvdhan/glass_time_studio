@@ -54,10 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
 let currentPage = 1;
 
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
+    var apiEndPoint = "${apiEndPoint}";
     currentPage = pageNumber;
     var memberId = "${param.memberId}";
     console.log('Loading Page Number: ' + pageNumber + ' with sort order: '+sortOrder);
-    fetch('http://localhost:8080/Booking/all/' + memberId + '?page=' + pageNumber + '&size=10')
+    fetch(apiEndPoint+'/Booking/all/' + memberId + '?page=' + pageNumber + '&size=10')
     .then(response => response.json())
     .then(data => {
         console.log('Received data: '+data);

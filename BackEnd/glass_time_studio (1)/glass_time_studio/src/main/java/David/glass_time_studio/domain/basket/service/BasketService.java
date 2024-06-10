@@ -75,7 +75,17 @@ public class BasketService {
     public void deleteBasket (Basket basket) {
         basketRepository.delete(basket);
     }
+
     public Page<Basket> findAllBasket(int page, int size){
         return basketRepository.findAllBasket(PageRequest.of(page, size));
     }
+    public Page<Basket> findAllMyBasket(int page, int size, Long memberId){
+        Page<Basket> basketPage = basketRepository.findAllMyBasket(PageRequest.of(page, size), memberId);
+        if(basketPage.isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.BASKET_NOT_FOUND);
+        }else {
+            return basketPage;
+        }
+    }
+
 }

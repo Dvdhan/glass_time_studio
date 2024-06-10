@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="David.glass_time_studio.domain.product.entity.Product" %>
+<%@ page import="David.glass_time_studio.domain.member.entity.Member" %>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -180,6 +181,7 @@
             <span>[제품 대표 사진]</span>
             </div>
             <img class="img" src="${product.mainPhotoUrl}">
+            <% Member member = (Member) request.getAttribute("member"); %>
 
             <div id="productPhotoUrls">
                 <%
@@ -210,8 +212,41 @@
         </fieldset>
     </div>
         <button onclick="purchase()" type="button">제품 구매하기</button>
-        <button onclick="addBasket" type="button">장바구니 추가</button>
+        <button onclick="addBasket('${member.memberId}', '${product.productId}')" type="button">장바구니 추가</button>
     </div><br>
-  
+
+<script>
+function addBasket(memberId, productId){
+    var apiEndPoint = "${apiEndPoint}";
+    fetch(apiEndPoint+"/basket",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            memberId: memberId,
+            productId: productId
+        })
+    })
+    .then(response => {
+        if(!response.ok){
+            return response.json().then(error => {
+                throw new Error(error.message);
+            })
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("서버 응답: ", data);
+        alert('장바구니 추가 완료되었습니다.');
+        window.location.href = "/product_detail/"+productId;
+    })
+    .catch(error => {
+        console.error('문제가 발생했습니다: ', error);
+        alert(error.message);
+    });
+}
+
+</script>
 </body>
 </html>

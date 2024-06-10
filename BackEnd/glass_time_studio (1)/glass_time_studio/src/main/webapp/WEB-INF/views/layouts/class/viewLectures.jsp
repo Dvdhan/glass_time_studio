@@ -61,7 +61,8 @@ let currentPage = 1;
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
     currentPage = pageNumber;
     console.log('Loading Page Number: '+pageNumber + ' with sort order: '+sortOrder);
-    fetch('http://localhost:8080/lecture/all?page='+pageNumber+'&size=10')
+    var apiEndPoint = "${apiEndPoint}";
+    fetch(apiEndPoint+'/lecture/all?page='+pageNumber+'&size=10')
     .then(response => response.json())
     .then(data => {
         console.log('Received data: '+data);
@@ -141,6 +142,7 @@ function bindTableHeaderClicks() {
 }
 
 function search_keyword(){
+    var apiEndPoint = "${apiEndPoint}";
     let keyword = document.getElementById('keyword').value;
     console.log("검색어 ", keyword);
 
@@ -150,7 +152,8 @@ function search_keyword(){
     }
 
     const encodedKeyword = encodeURIComponent(keyword);
-    fetch("http://localhost:8080/lecture/search?keyword="+encodedKeyword)
+
+    fetch(apiEndPoint+"/lecture/search?keyword="+encodedKeyword)
     .then(response => {
         if (!response.ok) {
             throw new Error('검색 결과를 가져오는데 실패했습니다.');

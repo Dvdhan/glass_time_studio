@@ -19,4 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM PRODUCT WHERE product_name LIKE :keyword", nativeQuery = true)
     public List<Product> searchProduct(@Param("keyword") String keyword);
+
+
+    @Query(value = "SELECT * FROM PRODUCT WHERE productId = :productId", nativeQuery = true)
+    public Product findProductByProductId(@Param("productId") Long productId);
 }

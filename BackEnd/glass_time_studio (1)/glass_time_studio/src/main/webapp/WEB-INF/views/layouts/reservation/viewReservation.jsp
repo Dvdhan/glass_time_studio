@@ -72,9 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
 let currentPage = 1;
 
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
+    var apiEndPoint = "${apiEndPoint}";
     currentPage = pageNumber;
     console.log('Loading Page Number: '+pageNumber + ' with sort order: '+sortOrder);
-    fetch('http://localhost:8080/Booking/all?page='+pageNumber+'&size=10')
+    fetch(apiEndPoint+'/Booking/all?page='+pageNumber+'&size=10')
     .then(response => response.json())
     .then(data => {
         console.log('Received data: '+data);
@@ -210,6 +211,7 @@ function bindTableHeaderClicks() {
 }
 
 function search_keyword1(){
+    var apiEndPoint = "${apiEndPoint}";
     let keyword1 = document.getElementById('keyword1').value;
     console.log("검색어 ", keyword1);
 
@@ -219,7 +221,7 @@ function search_keyword1(){
     }
 
     const encodedKeyword1 = encodeURIComponent(keyword1);
-    fetch("http://localhost:8080/Booking/search_N?keyword="+encodedKeyword1)
+    fetch(apiEndPoint+"/Booking/search_N?keyword="+encodedKeyword1)
     .then(response => {
         if (!response.ok) {
             throw new Error('검색 결과를 가져오는데 실패했습니다.');
@@ -261,6 +263,7 @@ function search_keyword1(){
     });
 }
 function search_keyword2(){
+    var apiEndPoint = "${apiEndPoint}";
     let keyword2 = document.getElementById('keyword2').value;
     console.log("검색어 ", keyword2);
 
@@ -270,7 +273,7 @@ function search_keyword2(){
     }
 
     const encodedKeyword2 = encodeURIComponent(keyword2);
-    fetch("http://localhost:8080/Booking/search_Y?keyword="+encodedKeyword2)
+    fetch(apiEndPoint+"/Booking/search_Y?keyword="+encodedKeyword2)
     .then(response => {
         if (!response.ok) {
             throw new Error('검색 결과를 가져오는데 실패했습니다.');
