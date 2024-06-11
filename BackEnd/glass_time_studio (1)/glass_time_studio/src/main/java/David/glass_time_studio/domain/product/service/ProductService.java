@@ -28,8 +28,7 @@ public class ProductService {
 
     @Transactional
     public Product postProduct(Product product){
-        Product postedProduct = productRepository.save(product);
-        return postedProduct;
+        return productRepository.save(product);
     }
 
 
