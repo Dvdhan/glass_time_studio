@@ -64,7 +64,7 @@ public class BasketController {
         Basket target = basketService.findBasket(basketId);
         basketService.deleteReq(target, memberId);
         Map<String, String> responseMessage = new HashMap<>();
-        responseMessage.put("message", "["+target.getMemberName()+"]님의 요청하신 ["+target.getProductName()+"]의 장바구니 삭제가 완료되었습니다.");
+        responseMessage.put("message", "["+target.getMemberName()+"]님이 요청하신 ["+target.getProductName()+"]의 장바구니 삭제가 완료되었습니다.");
         return ResponseEntity.ok(responseMessage);
     }
     // 장바구니 전체 조회
