@@ -34,6 +34,9 @@ public class Order extends Auditable {
     private String mobile;
 
     @Column
+    private String address;
+
+    @Column
     private String productName;
 
     @Column

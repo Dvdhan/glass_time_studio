@@ -44,28 +44,68 @@ public class OrderService {
     }
 
     public Order setOrderPost(Order order, Long memberId, Long productId){
+        Order newOrder = new Order();
         Member member = memberService.findMemberById(memberId);
+        if(member == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }else{
+            newOrder.setMemberId(memberId);
+        }
         Product product = productService.findProduct(productId);
-
+        if(product == null){
+            throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
+        }else{
+            newOrder.setProductId(productId);
+        }
         Long productQuantity = product.getProductQuantity();
         log.info("DB 제품 재고량: "+productQuantity);
+
         Long requestQuantity = order.getProductQuantity();
         log.info("구매 요청의 재고량: "+requestQuantity);
+
         long stocks = productQuantity - requestQuantity;
         log.info("남은 재고량: "+stocks);
+
+        // 수량
         if(stocks < 0){
             throw new BusinessLogicException(ExceptionCode.OUT_OF_STOCK);
-        }else{
+        } else if(stocks == 0){
             product.setProductQuantity(stocks);
-            log.info("변경된 재고량: "+product.getProductQuantity());
+            product.setProductStatus("SOLD-OUT");
             productRepository.save(product);
+            newOrder.setProductQuantity(requestQuantity);
+        } else {
+            product.setProductQuantity(stocks);
+            log.info("변경된 DB 재고량: "+product.getProductQuantity());
+            productRepository.save(product);
+            newOrder.setProductQuantity(requestQuantity);
         }
-        order.setOrderStatus(OrderStatus.ORDERED);
-        order.setMobile(member.getMobile());
-        order.setMemberName(member.getMemberName());
-        order.setProductName(product.getProductName());
-        order.setProductPrice(product.getProductPrice());
-        return order;
+        // 주문자 주소
+        if(order.getAddress() == null){
+            throw new BusinessLogicException(ExceptionCode.ADDRESS_IS_EMPTY);
+        }else{
+            newOrder.setAddress(order.getAddress());
+        }
+        // 주문자 연락처
+        if(order.getMobile() == null){
+            throw new BusinessLogicException(ExceptionCode.MOBILE_IS_EMPTY);
+        }else {
+            newOrder.setMobile(order.getMobile());
+        }
+        // 주문자 이름
+        if(order.getMemberName() == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NAME_IS_EMPTY);
+        }else {
+            newOrder.setMemberName(order.getMemberName());
+        }
+        // 제품명
+        newOrder.setProductName(product.getProductName());
+        // 제품 가격
+        newOrder.setProductPrice(product.getProductPrice());
+        // 주문 상태
+        newOrder.setOrderStatus(OrderStatus.ORDERED);
+
+        return newOrder;
     }
     public Page<Order> findAllMyOrders(int page, int size, Long memberId){
         Page<Order> orderPage = orderRespository.findAllMyOrders(PageRequest.of(page, size), memberId);
@@ -105,6 +145,7 @@ public class OrderService {
     }
 
     public Order updateOrderStatus(Order order, Long orderId){
+        // DB 속 주문
         Order target = orderRespository.findByOrderId(orderId);
         if(target == null){
             throw new BusinessLogicException(ExceptionCode.ORDER_NOT_FOUND);
@@ -112,10 +153,34 @@ public class OrderService {
         log.info("DB에 저장된 주문 상태 : "+target.getOrderStatus());
         log.info("변경하려는 주문 상태 : "+order.getOrderStatus());
 
-        if(!target.getOrderStatus().equals(order.getOrderStatus())){
+        boolean isUpdated = false;
+        // 상태 변경
+        if(!target.getOrderStatus().equals(order.getOrderStatus())) {
             target.setOrderStatus(order.getOrderStatus());
+            isUpdated = true;
+        }
+        // 주소 변경
+        String newAddress = order.getAddress();
+        if(newAddress!=null && !target.getAddress().equals(newAddress)){
+            target.setAddress(newAddress);
+            isUpdated = true;
+        }
+        // 연락처 변경
+        String newMobile = order.getMobile();
+        if(newMobile != null && !target.getMobile().equals(newMobile)){
+            target.setMobile(newMobile);
+            isUpdated = true;
+        }
+        // 구매 수량 변경
+        Long newQuantity = order.getProductQuantity();
+        if(newQuantity != null && !target.getProductQuantity().equals(newQuantity)){
+            target.setProductQuantity(newQuantity);
+            isUpdated = true;
+        }
+        if(isUpdated){
             return orderRespository.save(target);
-        }else {
+        }
+        else {
             return target;
         }
     }
