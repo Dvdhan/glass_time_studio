@@ -41,7 +41,7 @@
       color: blue;
     }
     fieldset{
-      height: 27em;
+      height: 25em;
     }
     #pagination {
         text-align: center;
@@ -129,13 +129,13 @@ function updateDiv(products) {
             "<div>" + product.productStatus + "</div>" +
             "<div class='buttons'>"+
             "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
-            "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
             "<button><a class='detail' href='#' onclick='addToBasket(" + ${member.memberId} + "," + product.productId + ")'>장바구니 담기</a></button>" +
             "</div>" +
             "</fieldset>";
     });
     product_div.innerHTML = target;
 }
+
 function addToBasket(memberId, productId ){
     var apiEndPoint = "${apiEndPoint}";
     fetch(apiEndPoint+"/basket",{

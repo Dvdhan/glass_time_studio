@@ -16,7 +16,10 @@ public enum ExceptionCode {
     BASKET_MEMBER_ID_AND_MEMBER_ID_IS_DIFFERENT(400, "해당 장바구니 제품이 속한 회원 아이디와 삭제 요청한 회원이 다릅니다."),
     ORDER_NOT_FOUND(400, "찾으시는 주문 내역이 없습니다."),
     ORDER_MEMBER_ID_AND_MEMBER_ID_IS_DIFFERENT(400, "해당 주문이 가진 회원 아이디와 삭제 요청한 회원이 다릅니다"),
-    OUT_OF_STOCK(400, "구매하시고자 하는 물품양이 재고량보다 많습니다.")
+    OUT_OF_STOCK(400, "구매하시고자 하는 물품양이 재고량보다 많습니다."),
+    ADDRESS_IS_EMPTY(400, "제품을 수령할 주소지가 없습니다."),
+    MOBILE_IS_EMPTY(400, "주문자 연락처가 누락되었습니다."),
+    MEMBER_NAME_IS_EMPTY(400, "주문자 성함이 누락되었습니다.")
     ;
 
     @Getter

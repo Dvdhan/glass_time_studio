@@ -63,7 +63,9 @@
         margin-top: 10px;
         margin-bottom: 1em;
     }
-
+    .detail{
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -211,7 +213,7 @@
             </div>
         </fieldset>
     </div>
-        <button onclick="purchase()" type="button">제품 구매하기</button>
+        <button><a class='detail' href='/product_purchase/'+product.productId>제품 구매하기</a></button>
         <button onclick="addBasket('${member.memberId}', '${product.productId}')" type="button">장바구니 추가</button>
     </div><br>
 

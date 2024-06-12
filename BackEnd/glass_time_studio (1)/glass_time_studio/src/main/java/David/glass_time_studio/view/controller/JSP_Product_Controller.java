@@ -127,6 +127,7 @@ public class JSP_Product_Controller {
         }
         return "layouts/product/product_detail";
     }
+    
 
     @GetMapping("/productManager")
     public String productManager(Model model, HttpServletRequest request){

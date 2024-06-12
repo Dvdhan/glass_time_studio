@@ -41,7 +41,7 @@
       color: blue;
     }
     fieldset{
-      height: 27em;
+      height: 25em;
     }
     #pagination {
         text-align: center;
@@ -165,7 +165,6 @@ function createProductHTML(basket, product) {
         "<div>" + product.productStatus + "</div>" +
         "<div class='buttons'>" +
             "<button><a class='detail' href='/product_detail/" + product.productId + "'>상세보기</a></button>" +
-            "<button><a class='detail' target='_blank' href='https://smartstore.naver.com/glasstime/products/9846789288'>구매하기</a></button>" +
             "<button><a class='detail' href='#' onclick='deleteFromBasket(" + memberId + ", " + basket.basketId + ")'>장바구니 삭제</a></button>" +
         "</div>" +
         "</fieldset>";

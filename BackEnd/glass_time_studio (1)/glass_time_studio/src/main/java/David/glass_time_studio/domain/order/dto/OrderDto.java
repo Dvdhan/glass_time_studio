@@ -13,7 +13,10 @@ public class OrderDto {
     @AllArgsConstructor
     public static class Post{
         Long memberId;
+        String memberName;
+        String mobile;
         Long productId;
+        String address;
         Long productQuantity;
     }
     @Getter
@@ -23,6 +26,8 @@ public class OrderDto {
     public static class Patch{
         Long orderId;
         Long memberId;
+        String mobile;
+        String address;
         Long productQuantity;
         String orderStatus;
     }
@@ -35,6 +40,7 @@ public class OrderDto {
         Long memberId;
         String memberName;
         String mobile;
+        String address;
         Long productId;
         String productName;
         Long productPrice;
