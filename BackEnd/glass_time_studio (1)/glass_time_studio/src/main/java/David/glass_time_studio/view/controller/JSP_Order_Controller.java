@@ -34,8 +34,8 @@ public class JSP_Order_Controller {
         this.memberRepository=memberRepository;
     }
 
-    @GetMapping("/order_product/{productId}")
-    public String order_product(@PathVariable("productId")@Positive Long productId,
+    @GetMapping("/post_order/{productId}")
+    public String post_order(@PathVariable("productId")@Positive Long productId,
                                    Model model, HttpServletRequest request){
         model.addAttribute("apiEndPoint", apiEndPoint);
 
@@ -63,6 +63,6 @@ public class JSP_Order_Controller {
         }else {
             System.out.println("Pricipal Type: "+authentication.getPrincipal().getClass());
         }
-        return "layouts/orders/order_product";
+        return "layouts/orders/post_order";
     }
 }

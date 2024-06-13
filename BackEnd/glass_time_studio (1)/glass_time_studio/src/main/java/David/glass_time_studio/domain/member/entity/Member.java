@@ -2,6 +2,7 @@ package David.glass_time_studio.domain.member.entity;
 
 import David.glass_time_studio.domain.basket.entity.Basket;
 import David.glass_time_studio.domain.booking.entity.Booking;
+import David.glass_time_studio.domain.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,8 +45,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Booking> bookings = new ArrayList<>();
 
-//    @OneToOne(mappedBy = "member")
-//    private Basket basket;
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    List<Order> orders;
 
     public Member(String email) {
         this.email = email;

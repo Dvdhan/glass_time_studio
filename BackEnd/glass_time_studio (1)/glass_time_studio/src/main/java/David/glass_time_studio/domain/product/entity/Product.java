@@ -1,6 +1,7 @@
 package David.glass_time_studio.domain.product.entity;
 
 import David.glass_time_studio.domain.basketProduct.entity.BasketProduct;
+import David.glass_time_studio.domain.orderProduct.entity.OrderProduct;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,12 +53,14 @@ public class Product {
     private String photoUrl_10;
 
     @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
     private List<BasketProduct> basketProducts = new ArrayList<>();
 
 
     public Product(Long productId, String productName, String productDescription,
                    Long productPrice, Long productQuantity,String mainPhotoUrl,
-                   List<String> productPhotoUrls,
                    String photoUrl_1,String photoUrl_2,String photoUrl_3,
                    String photoUrl_4,String photoUrl_5,String photoUrl_6,
                    String photoUrl_7,String photoUrl_8,String photoUrl_9,
@@ -69,7 +72,6 @@ public class Product {
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
         this.mainPhotoUrl = mainPhotoUrl;
-//        this.productPhotoUrls = productPhotoUrls;
         this.photoUrl_1=photoUrl_1;
         this.photoUrl_2=photoUrl_2;
         this.photoUrl_3=photoUrl_3;
