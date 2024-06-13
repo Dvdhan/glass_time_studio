@@ -6,6 +6,8 @@ import David.glass_time_studio.domain.member.service.MemberService;
 import David.glass_time_studio.domain.order.entity.Order;
 import David.glass_time_studio.domain.order.entity.OrderStatus;
 import David.glass_time_studio.domain.order.repository.OrderRespository;
+import David.glass_time_studio.domain.orderProduct.entity.OrderProduct;
+import David.glass_time_studio.domain.orderProduct.repository.OrderProductRepository;
 import David.glass_time_studio.domain.product.entity.Product;
 import David.glass_time_studio.domain.product.repository.ProductRepository;
 import David.glass_time_studio.domain.product.service.ProductService;
@@ -25,15 +27,17 @@ public class OrderService {
     private MemberRepository memberRepository;
     private ProductService productService;
     private ProductRepository productRepository;
+    private OrderProductRepository orderProductRepository;
 
     public OrderService (OrderRespository orderRespository, MemberService memberService,
                          MemberRepository memberRepository, ProductService productService,
-                         ProductRepository productRepository) {
+                         ProductRepository productRepository, OrderProductRepository orderProductRepository) {
         this.orderRespository=orderRespository;
         this.memberService=memberService;
         this.memberRepository=memberRepository;
         this.productService=productService;
         this.productRepository=productRepository;
+        this.orderProductRepository=orderProductRepository;
     }
 
     public Order postOrder(Order order){

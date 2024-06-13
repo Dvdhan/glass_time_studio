@@ -1,10 +1,15 @@
 package David.glass_time_studio.domain.order.entity;
 
+import David.glass_time_studio.domain.member.entity.Member;
+import David.glass_time_studio.domain.orderProduct.entity.OrderProduct;
 import David.glass_time_studio.global.auditable.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -16,6 +21,10 @@ public class Order extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long orderId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "member_id")
+//    private Member member;
 
     @Column
     private Long memberId;
@@ -45,7 +54,15 @@ public class Order extends Auditable {
     @Column
     private Long productQuantity;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderProduct> orderProducts = new ArrayList<>();
+
     public String getOrderStatusDescription(){
         return orderStatus.getDescription();
     }
+
+//    public void addOrderProduct(OrderProduct orderProduct){
+//        orderProducts.add(orderProduct);
+//        orderProduct.setOrder(this);
+//    }
 }
