@@ -19,7 +19,9 @@ public enum ExceptionCode {
     OUT_OF_STOCK(400, "구매하시고자 하는 물품양이 재고량보다 많습니다."),
     ADDRESS_IS_EMPTY(400, "제품을 수령할 주소지가 없습니다."),
     MOBILE_IS_EMPTY(400, "주문자 연락처가 누락되었습니다."),
-    MEMBER_NAME_IS_EMPTY(400, "주문자 성함이 누락되었습니다.")
+    MEMBER_NAME_IS_EMPTY(400, "주문자 성함이 누락되었습니다."),
+    REVIEW_ALREADY_EXIST(400, "해당 수업과 해당 사용자의 리뷰가 존재합니다."),
+    LECTURE_HISTORY_WITH_MEMBER_ID_IS_NOT_FOUND(400,"해당 사용자 아이디로 참여한 수업이 없습니다.");
     ;
 
     @Getter

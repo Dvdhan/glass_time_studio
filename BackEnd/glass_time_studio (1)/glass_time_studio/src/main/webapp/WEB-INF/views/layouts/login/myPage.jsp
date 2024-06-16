@@ -32,7 +32,7 @@
         <input type="hidden" name="memberId" id="memberId" value="${member.getMemberId()}">
         <div style="text-align: right;">
         <a class="button" href="/myBooking?memberId=${member.getMemberId()}">내 클래스 예약 살펴보기</a><br>
-        <a class="button" onclick="seeMyPurchase()">구매 내역 살펴보기</a><br>
+        <a class="button" href="/myOrders?memberId=${member.getMemberId()}">구매 내역 살펴보기</a><br>
         <a class="button" href="/myAllBasket">장바구니</button></a><br>
         <a class="button" href="/updateInfo?name=${member.getMemberName()}&email=${member.getEmail()}&mobile=${member.getMobile()}&birthday=${member.getBirthday()}&memberId=${member.getMemberId()}">개인정보 수정하기</a>
         </div>

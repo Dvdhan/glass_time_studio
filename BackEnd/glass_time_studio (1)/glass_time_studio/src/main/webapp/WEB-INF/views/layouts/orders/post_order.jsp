@@ -196,7 +196,7 @@
 
             <div class="class_attribute">
             <span>[휴대폰 번호]</span>
-            <input type="number" value="${member.memberName}" id="buyerMobile" name="buyerMobile">
+            <input type="text" value="${member.mobile}" id="buyerMobile" name="buyerMobile">
             </div>
 
             <div class="class_attribute">
@@ -217,7 +217,6 @@
         </fieldset>
     </div>
         <button class="clickButtons" onMouseover="changeColor(this)" onMouseout="rollbackColor(this)" onclick="purchase()">제품 구매하기</button>
-        <button class="clickButtons" onMouseover="changeColor(this)" onMouseout="rollbackColor(this)" onclick="addBasket('${member.memberId}', '${product.productId}')" type="button">장바구니 추가</button>
     </div><br>
 
 <script>
@@ -231,11 +230,13 @@ function purchase() {
     var productQuantity = document.getElementById('quantity').value;
     var productName = "${product.productName}";
     var apiEndPoint = "${apiEndPoint}";
+    var productPrice = "${product.productPrice}";
+    var orderPayment =  productQuantity * productPrice;
 
     if(!memberName){
         alert('구매자 성함이 누락되었습니다.');
         return false;
-    }else if(!mobile || mobile.length >11 || mobile.length <11){
+    }else if(!mobile){
         alert('휴대폰 번호를 확인해주세요.');
         return false;
     }else if(!productQuantity){
@@ -246,7 +247,7 @@ function purchase() {
         return false;
     }
 
-    if(!confirm('주문 정보 확인 부탁드립니다.\n\n제품명 : '+productName+'\n구매자 성함: '+memberName+'\n휴대폰 번호 : '+mobile+'\n구매 수량 : '+productQuantity+'\n배송 주소 : '+address)){
+    if(!confirm('주문 정보 확인 부탁드립니다.\n\n제품명 : '+productName+'\n구매자 성함: '+memberName+'\n휴대폰 번호 : '+mobile+'\n구매 수량 : '+productQuantity+'\n배송 주소 : '+address + '\n최종 결제 금액 : '+orderPayment + ' KRW')){
         return false;
     }
 
@@ -268,7 +269,8 @@ function purchase() {
             memberName: memberName,
             mobile: mobile,
             address: address,
-            productQuantity: productQuantity
+            productQuantity: productQuantity,
+            orderPayment: orderPayment
         })
     })
     .then(response => {
@@ -293,36 +295,6 @@ function changeColor(button) {
 }
 function rollbackColor(button) {
   button.style.color = 'black';
-}
-function addBasket(memberId, productId){
-    var apiEndPoint = "${apiEndPoint}";
-    fetch(apiEndPoint+"/basket",{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            memberId: memberId,
-            productId: productId
-        })
-    })
-    .then(response => {
-        if(!response.ok){
-            return response.json().then(error => {
-                throw new Error(error.message);
-            })
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("서버 응답: ", data);
-        alert('장바구니 추가 완료되었습니다.');
-        window.location.href = "/product_detail/"+productId;
-    })
-    .catch(error => {
-        console.error('문제가 발생했습니다: ', error);
-        alert(error.message);
-    });
 }
 
 </script>

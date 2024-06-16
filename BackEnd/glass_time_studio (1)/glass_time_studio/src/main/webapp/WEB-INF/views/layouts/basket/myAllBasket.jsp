@@ -70,7 +70,6 @@
   <div id="pagination"></div>
 
   <% Member member = (Member) request.getAttribute("member"); %>
-
   <div id="search_area" style="margin-top: 1em;">
   <input type="text" id="keyword" name="keyword" onkeypress="handleKeyPress(event)">
   <button type="button" onClick="search_keyword()">검색하기</button>
@@ -269,7 +268,7 @@ function search_keyword() {
         const empty_letter = document.querySelector("#empty_letter");
 
         if(products.length <= 0) {
-            empty_letter.innerHTML = "<h1>죄송합니다<br>현재 판매 중인 제품이 없습니다.</h1>";
+            empty_letter.innerHTML = "<h1>장바구니 내역이 없습니다.</h1>";
             return;
         } else {
             let target ='';
