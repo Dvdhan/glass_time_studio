@@ -40,6 +40,8 @@ public class ReviewService {
 
         Booking checkingBooking = bookingRepository.findBookingStatusByMemberIdAndBookingId(memberId, bookingId);
         Review checkingReview = reviewRepository.findReviewByMemberIdAndBookingId(memberId, bookingId);
+
+
         // 조건 1. 해당 회원 아이디, 수업 예약 ID 로 상태 Y 인 수업 예약 기록이 있는지 조회
         if(checkingBooking == null)
         {
@@ -81,6 +83,9 @@ public class ReviewService {
     public Review updateReview(Review review, Long memberId, Long reviewId){
         Review foundByMemberIdAndReviewId = reviewRepository.findReviewByMemberIdAndReviewId(memberId, reviewId);
 
+        if(foundByMemberIdAndReviewId == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ID_IS_NOT_MATCHED_WITH_REVIEW);
+        }
         String oldTitle = foundByMemberIdAndReviewId.getTitle();
         String newTitle = review.getTitle();
 
@@ -102,6 +107,28 @@ public class ReviewService {
         }
         else {
             return foundByMemberIdAndReviewId;
+        }
+    }
+
+    public Review findMyReview(Long memberId, Long reviewId){
+        Review review = reviewRepository.findReviewByMemberIdAndReviewId(memberId, reviewId);
+        if(review == null){
+            throw new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND);
+        }else {
+            return review;
+        }
+    }
+    public void deleteReq(Review review){
+        reviewRepository.delete(review);
+    }
+
+    public Review findReviewById(Long reviewId){
+        Review foundReview = reviewRepository.findReviewByReviewId(reviewId);
+        if(foundReview == null){
+            throw new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND);
+        }
+        else {
+            return foundReview;
         }
     }
 

@@ -18,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -44,7 +46,7 @@ public class ReviewController {
         return new ResponseEntity(response, headers, HttpStatus.CREATED);
     }
 
-    // 나의 모든 리뷰 조회 (마이페이지)
+    // 나의 모든 리뷰 조회 (마이페이지용)
     @GetMapping("/allMyReviews/{memberId}")
     public ResponseEntity allMyOrders(@Positive @RequestParam int page,
                                       @Positive @RequestParam int size,
@@ -63,7 +65,7 @@ public class ReviewController {
         return new ResponseEntity(
                 new MultiResponse<>(responses, pageInfo),HttpStatus.OK);
     }
-    // 전체 리뷰 조회 [관리자용]
+    // 전체 리뷰 조회 (전체 게시글 조회용)
     @GetMapping("/all")
     public ResponseEntity allReviews(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size){
@@ -90,4 +92,24 @@ public class ReviewController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    // 내 리뷰 삭제하기 (일반 고객)
+    @DeleteMapping("/delete/{memberId}/{reviewId}")
+    public ResponseEntity deleteMyReview(@PathVariable("memberId")@Positive Long memberId,
+                                         @PathVariable("reviewId")@Positive Long reviewId){
+        Review review = reviewService.findMyReview(memberId, reviewId);
+        reviewService.deleteReq(review);
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "["+review.getTitle()+"] 게시글 삭제가 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
+
+    // 리뷰 삭제하기 (관리자용)
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity deleteReview(@PathVariable("reviewId")@Positive Long reviewId){
+        Review review = reviewService.findReviewById(reviewId);
+        reviewService.deleteReq(review);
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "["+review.getTitle()+"] 게시글 삭제가 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
 }

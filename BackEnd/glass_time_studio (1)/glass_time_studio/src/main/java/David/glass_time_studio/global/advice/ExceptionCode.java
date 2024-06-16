@@ -21,7 +21,9 @@ public enum ExceptionCode {
     MOBILE_IS_EMPTY(400, "주문자 연락처가 누락되었습니다."),
     MEMBER_NAME_IS_EMPTY(400, "주문자 성함이 누락되었습니다."),
     REVIEW_ALREADY_EXIST(400, "해당 수업과 해당 사용자의 리뷰가 존재합니다."),
-    LECTURE_HISTORY_WITH_MEMBER_ID_IS_NOT_FOUND(400,"해당 사용자 아이디로 참여한 수업이 없습니다.");
+    LECTURE_HISTORY_WITH_MEMBER_ID_IS_NOT_FOUND(400,"해당 사용자 아이디로 참여한 수업이 없습니다."),
+    MEMBER_ID_IS_NOT_MATCHED_WITH_REVIEW(400, "후기 작성자 본인만 수정/삭제할 수 있습니다."),
+    REVIEW_NOT_FOUND(400, "찾으시는 리뷰가 없습니다.");
     ;
 
     @Getter
