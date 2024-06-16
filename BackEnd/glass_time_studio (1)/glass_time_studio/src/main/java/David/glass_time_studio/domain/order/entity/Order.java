@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +58,13 @@ public class Order extends Auditable {
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
+    @Column
+    private Long orderPayment;
+
     public String getOrderStatusDescription(){
         return orderStatus.getDescription();
     }
+
 
 //    public void addOrderProduct(OrderProduct orderProduct){
 //        orderProducts.add(orderProduct);

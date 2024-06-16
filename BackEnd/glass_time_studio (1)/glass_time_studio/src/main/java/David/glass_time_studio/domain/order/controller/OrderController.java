@@ -67,15 +67,14 @@ public class OrderController {
                 new MultiResponse<>(responses, pageInfo),HttpStatus.OK);
     }
     // 내 주문 단일 조회
-    @GetMapping("/{memberId}/{orderId}")
-    public ResponseEntity findMyOrder (@PathVariable("memberId")@Positive Long memberId,
-                                       @PathVariable("orderId")@Positive Long orderId) {
-        log.info("내 주문 단일 조회 - memberId: "+memberId+"orderId: "+orderId);
-        Order order = orderService.findMyOrder(memberId, orderId);
-        OrderDto.Response response = orderMapper.orderToOrderDtoResponse(order);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
+//    @GetMapping("/{memberId}/{orderId}")
+//    public ResponseEntity findMyOrder (@PathVariable("memberId")@Positive Long memberId,
+//                                       @PathVariable("orderId")@Positive Long orderId) {
+//        log.info("내 주문 단일 조회 - memberId: "+memberId+"orderId: "+orderId);
+//        Order order = orderService.findMyOrder(memberId, orderId);
+//        OrderDto.Response response = orderMapper.orderToOrderDtoResponse(order);
+//        return new ResponseEntity(response, HttpStatus.OK);
+//    }
     // 전체 주문 조회 [관리자용]
     @GetMapping("/all")
     public ResponseEntity allOrders(@Positive @RequestParam int page,
@@ -91,35 +90,75 @@ public class OrderController {
         return new ResponseEntity(
                 new MultiResponse<>(responses, pageInfo),HttpStatus.OK);
     }
-    // 주문 취소
+    // 주문 취소 (일반 고객)
     @DeleteMapping("/{memberId}/{orderId}")
     public ResponseEntity deleteOrder(@PathVariable("memberId")@Positive Long memberId,
                                       @PathVariable("orderId")@Positive Long orderId) {
         log.info("내 주문 단일 조회 - memberId: "+memberId+", orderId: "+orderId);
         Order order = orderService.findMyOrder(memberId, orderId);
 
-        OrderStatus[] invalidCancelArray = {OrderStatus.MAKING, OrderStatus.SHIPPING, OrderStatus.DELIVERED};
+        Order dbOrder = orderService.findOrderByOrderId(orderId);
+
+        OrderStatus[] invalidCancelArray = {OrderStatus.MAKING, OrderStatus.SHIPPING, OrderStatus.DELIVERED, OrderStatus.CANCELED};
         Map<String, String> responseMessage = new HashMap<>();
 
         for (OrderStatus status : invalidCancelArray){
             if(order.getOrderStatus() == status){
-                responseMessage.put("message", "["+order.getMemberName()+"]님이 요청하신, 주문번호 ["+orderId+"] - ["+order.getProductName()+"]의 주문은 ["+status+"] 단계라 취소 불가능 합니다.\n" +
+                responseMessage.put("message", "["+dbOrder.getMemberName()+"]님이 요청하신,\n주문번호 ["+orderId+"] - ["+dbOrder.getProductName()+"]의 주문은,\n["+status+"] 단계라 취소 불가능 합니다.\n" +
                         "판매자(010-1234-1234)에게 직접 연락주세요.");
                 return ResponseEntity.ok(responseMessage);
             }
         }
         orderService.deleteReq(order, memberId);
-        responseMessage.put("message", "["+order.getMemberName()+"]님이 요청하신, 주문번호 ["+orderId+"] - ["+order.getProductName()+"]의 주문이 취소되었습니다.");
+        responseMessage.put("message", "["+dbOrder.getMemberName()+"]님이 요청하신,\n주문번호 ["+orderId+"] - ["+dbOrder.getProductName()+"]의 주문이 취소되었습니다.");
         return ResponseEntity.ok(responseMessage);
     }
-    // 주문 상태 변경 [관리자용]
+    // 주문 취소 (매니저용)
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity deleteOrderForManager(@PathVariable("orderId")@Positive Long orderId){
+        Order order = orderService.findOrderByOrderId(orderId);
+        orderService.deleteOrder(order);
+
+        Map<String, String> responseMessage = new HashMap<>();
+        responseMessage.put("message", "요청하신 '"+order.getMemberName()+"'님의 "+order.getOrderId()+"'번 예약 삭제가 완료되었습니다.");
+        return ResponseEntity.ok(responseMessage);
+    }
+
+
+    // 주문 정보 변경 (일반 고객)
     @PatchMapping("/updateStatus/{orderId}")
     public ResponseEntity updateOrderStatus(@PathVariable("orderId")@Positive Long orderId,
                                             @RequestBody OrderDto.Patch patch){
         log.info("주문 상태 변경 orderId: "+orderId);
         log.info("Patch DTO {}", patch);
         Order order = orderMapper.orderDtoPatchToOrder(patch);
+
+        log.info("order {}",order);
+
+        Order dbOrder = orderService.findOrderByOrderId(orderId);
+
+        OrderStatus[] invalidCancelArray = {OrderStatus.MAKING, OrderStatus.SHIPPING, OrderStatus.DELIVERED, OrderStatus.CANCELED};
+        Map<String, String> responseMessage = new HashMap<>();
+
+        for (OrderStatus status : invalidCancelArray){
+            if(order.getOrderStatus() == status){
+                responseMessage.put("message", "["+dbOrder.getMemberName()+"]님이 요청하신,\n주문번호 ["+orderId+"] - ["+dbOrder.getProductName()+"]의 주문은,\n["+status+"] 단계라 변경/취소가 불가능 합니다.\n" +
+                        "판매자(010-1234-1234)에게 직접 연락주세요.");
+                return ResponseEntity.ok(responseMessage);
+            }
+        }
         Order updateOrder = orderService.updateOrderStatus(order, orderId);
+        OrderDto.Response response = orderMapper.orderToOrderDtoResponse(updateOrder);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+    // 주문 상태 변경 (매니저용)
+    @PatchMapping("/updateStatusForManager/{orderId}")
+    public ResponseEntity updateStatusForManager(@PathVariable("orderId")@Positive Long orderId,
+                                            @RequestBody OrderDto.Patch patch){
+        log.info("주문 상태 변경 orderId: "+orderId);
+        log.info("Patch DTO {}", patch);
+        Order order = orderMapper.orderDtoPatchToOrder(patch);
+        Order updateOrder = orderService.updateOrderStatusForManager(order, orderId);
         OrderDto.Response response = orderMapper.orderToOrderDtoResponse(updateOrder);
         return new ResponseEntity(response, HttpStatus.OK);
     }

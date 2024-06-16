@@ -108,16 +108,21 @@ public class OrderService {
         newOrder.setProductPrice(product.getProductPrice());
         // 주문 상태
         newOrder.setOrderStatus(OrderStatus.ORDERED);
+        // 최종 결제 가격
+        Long productPrice = product.getProductPrice();
+        Long payment = productPrice * requestQuantity;
+        newOrder.setOrderPayment(payment);
 
         return newOrder;
     }
     public Page<Order> findAllMyOrders(int page, int size, Long memberId){
         Page<Order> orderPage = orderRespository.findAllMyOrders(PageRequest.of(page, size), memberId);
-        if(orderPage.isEmpty()){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        }else {
-            return orderPage;
-        }
+//        if(orderPage.isEmpty()){
+//            throw new BusinessLogicException(ExceptionCode.ORDER_NOT_FOUND);
+//        }else {
+//            return orderPage;
+//        }
+        return orderPage;
     }
     public Order findMyOrder (Long memberId, Long orderId){
         Order order = orderRespository.findMyOrder(memberId, orderId);
@@ -129,10 +134,15 @@ public class OrderService {
     }
     public Page<Order> findAllOrders(int page, int size){
         Page<Order> orderPage = orderRespository.findAllOrders(PageRequest.of(page, size));
-        if(orderPage.isEmpty()){
+        return orderPage;
+    }
+
+    public Order findOrderByOrderId(Long orderId){
+        Order foundOrder = orderRespository.findByOrderId(orderId);
+        if(foundOrder == null){
             throw new BusinessLogicException(ExceptionCode.ORDER_NOT_FOUND);
         }else {
-            return orderPage;
+            return foundOrder;
         }
     }
 
@@ -145,11 +155,43 @@ public class OrderService {
         }
     }
     public void deleteOrder(Order order){
+        // 취소하려는 주문의 구매했던 수량
+        Long recoverQuantity = order.getProductQuantity();
+
+        // 취소려는 주문에 해당하는 상품 id
+        Long targetProductId = order.getProductId();
+
+        // 취소하려는 주문에 해당하는 제품
+        Product product = productService.findProduct(targetProductId);
+
+        // 취소하려는 주문에 해당하는 제품 수량 수정 (기존 수량 + 취소하려는 주문에 해당하는 수량)
+        product.setProductQuantity(product.getProductQuantity() + recoverQuantity);
+        productRepository.save(product);
         orderRespository.delete(order);
     }
 
+    public Order updateOrderStatusForManager(Order order, Long orderId){
+        // 변경 하려는 OrderId에 해당하는 주문 데이터.
+        Order previousOrder = orderRespository.findByOrderId(orderId);
+
+        // 변경하려는 주문데이터의 상태 => 넘어온 orderStatus 데이터 할당.
+        previousOrder.setOrderStatus(order.getOrderStatus());
+
+        // 만약 취소 상태라면, 기존 상품 수량 => 기존 수량 + 취소하려는 주문의 수량
+        if(order.getOrderStatus() == OrderStatus.CANCELED){
+            if(previousOrder.getProductQuantity()>0){
+                Long productId = previousOrder.getProductId();
+                Product oldProduct = productService.findProduct(productId);
+                oldProduct.setProductQuantity(oldProduct.getProductQuantity()+previousOrder.getProductQuantity());
+                productRepository.save(oldProduct);
+            }
+        }
+        return orderRespository.save(previousOrder);
+    }
+
+
     public Order updateOrderStatus(Order order, Long orderId){
-        // DB 속 주문
+        // DB 속 변경하려는 ORDER
         Order target = orderRespository.findByOrderId(orderId);
         if(target == null){
             throw new BusinessLogicException(ExceptionCode.ORDER_NOT_FOUND);
@@ -158,11 +200,6 @@ public class OrderService {
         log.info("변경하려는 주문 상태 : "+order.getOrderStatus());
 
         boolean isUpdated = false;
-        // 상태 변경
-        if(!target.getOrderStatus().equals(order.getOrderStatus())) {
-            target.setOrderStatus(order.getOrderStatus());
-            isUpdated = true;
-        }
         // 주소 변경
         String newAddress = order.getAddress();
         if(newAddress!=null && !target.getAddress().equals(newAddress)){
@@ -175,10 +212,24 @@ public class OrderService {
             target.setMobile(newMobile);
             isUpdated = true;
         }
-        // 구매 수량 변경
+        // 변경하려는 구매 수량
         Long newQuantity = order.getProductQuantity();
         if(newQuantity != null && !target.getProductQuantity().equals(newQuantity)){
+
+            // DB의 Order의 수량 => 수정하려는 수량으로 수정.
+            Product savedProduct = productService.findProduct(target.getProductId());
+
+            // 원래 제품 수량 = 기존 DB의 Product 수량 + DB에 존재하는 Order의 수량
+            Long originalQuantity = savedProduct.getProductQuantity() + target.getProductQuantity();
+
+            // DB의 Product 수량 = 원래 제품 수량 - 수정하려는 수량
+            savedProduct.setProductQuantity(originalQuantity-newQuantity);
+
+            // 변경하려는 기존 DB의 Order - Product 수량 =
             target.setProductQuantity(newQuantity);
+
+            Long newOrderPayment = newQuantity * target.getProductPrice();
+            target.setOrderPayment(newOrderPayment);
             isUpdated = true;
         }
         if(isUpdated){
