@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(value = "SELECT * FROM REVIEW WHERE member_Id = :memberId AND booking_Id = :bookingId", nativeQuery = true)
@@ -17,9 +19,15 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = "SELECT * FROM REVIEW WHERE member_id = :memberId", nativeQuery = true)
     public Page<Review> findAllMyReviews(Pageable pageable, @Param("memberId")Long memberId);
 
-    @Query(value = "SELECT * FROM REVIEW order by order_id desc", nativeQuery = true)
+    @Query(value = "SELECT * FROM REVIEW order by review_id desc", nativeQuery = true)
     public Page<Review> findAllReviews(Pageable pageable);
 
     @Query(value = "SELECT * FROM REVIEW WHERE member_id = :memberId AND review_id = :reviewId", nativeQuery = true)
     public Review findReviewByMemberIdAndReviewId(@Param("memberId") Long memberId, @Param("reviewId") Long reviewId);
+
+    @Query(value = "SELECT * FROM REVIEW WHERE review_id = :reviewId", nativeQuery = true)
+    public Review findReviewByReviewId(@Param("reviewId")Long reviewId);
+
+    @Query(value = "SELECT * FROM REVIEW WHERE lecture_name LIKE :keyword", nativeQuery = true)
+    public List<Review> searchReview(@Param("keyword")String keyword);
 }

@@ -156,6 +156,15 @@ public class BookingController {
         return ResponseEntity.ok(responseMessage);
     }
 
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<BookingDto.Response>> findMyBooking(@PathVariable("memberId")@Positive Long memberId){
+        List<Booking> bookings = bookingService.findMyBooking(memberId);
+        List<BookingDto.Response> response = bookings.stream()
+                .map(bookingMapper::bookingToBookingDtoResponse)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     // 회원번호 기준 예약 전체 조회
     @GetMapping("/all/{memberId}")
     public ResponseEntity findAllLecture(@Positive @RequestParam int page,
