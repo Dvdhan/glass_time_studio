@@ -23,5 +23,8 @@ public class Review extends Auditable {
     private Long memberId;
     @Column
     private Long bookingId;
-
+    @Column
+    private String lecture_Name;
+    @Column
+    private Long lecture_Id;
 }

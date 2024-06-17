@@ -89,9 +89,10 @@ let currentPage = 1; // 현재 페이지 상태를 전역으로 관리
 
 // 페이지와 정렬을 동시에 처리하는 함수
 function loadPage(pageNumber, sortOrder = 'asc', sortBy = 'id') {
+    let apiEndPoint = "${apiEndPoint}";
     currentPage = pageNumber;  // 현재 페이지 업데이트
     console.log('Loading page number: ' + pageNumber + ' with sort order: ' + sortOrder);
-    fetch('http://localhost:8080/Announcement/all?page='+pageNumber+'&size=10')
+    fetch(apiEndPoint+'/Announcement/all?page='+pageNumber+'&size=10')
     .then(response => response.json())
     .then(data => {
         console.log('Received data:', data);
@@ -172,6 +173,7 @@ function bindTableHeaderClicks() {
 }
 
 function search_keyword(){
+    var apiEndPoint = "${apiEndPoint}";
     let keyword = document.getElementById('keyword').value;
     console.log("검색어 ", keyword);
     if(!keyword.trim()) {
@@ -180,7 +182,7 @@ function search_keyword(){
     }
 
     const encodedKeyword = encodeURIComponent(keyword);
-    fetch("http://localhost:8080/Announcement/search?keyword="+encodedKeyword)
+    fetch(apiEndPoint+"/Announcement/search?keyword="+encodedKeyword)
     .then(response => {
         if (!response.ok) {
             throw new Error('검색 결과를 가져오는데 실패했습니다.');

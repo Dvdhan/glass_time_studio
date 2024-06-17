@@ -33,8 +33,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "UPDATE BOOKING SET status = 'N' WHERE booking_Id = :bookingId", nativeQuery = true)
     public void cancelRSVN(@Param("bookingId") Long bookingId);
 
-    @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId", nativeQuery = true)
-    public Booking findMyBooking(@Param("memberId") Long memberId);
+    @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId and status='Y'", nativeQuery = true)
+    public List<Booking> findMyBookingOnlyStatusY(@Param("memberId") Long memberId);
 
     @Query(value = "SELECT * FROM BOOKING WHERE member_Id = :memberId AND booking_Id = :bookingId", nativeQuery = true)
     public Booking findMyBookingByMemberIdAndBookingId(@Param("memberId") Long memberId, @Param("bookingId") Long bookingId);

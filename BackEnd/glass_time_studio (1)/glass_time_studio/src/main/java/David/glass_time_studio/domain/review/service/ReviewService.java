@@ -3,6 +3,8 @@ package David.glass_time_studio.domain.review.service;
 import David.glass_time_studio.domain.booking.entity.Booking;
 import David.glass_time_studio.domain.booking.repository.BookingRepository;
 import David.glass_time_studio.domain.booking.service.BookingService;
+import David.glass_time_studio.domain.lecture.entity.Lecture;
+import David.glass_time_studio.domain.lecture.service.LectureService;
 import David.glass_time_studio.domain.member.entity.Member;
 import David.glass_time_studio.domain.member.repository.MemberRepository;
 import David.glass_time_studio.domain.member.service.MemberService;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class ReviewService {
@@ -23,20 +27,29 @@ public class ReviewService {
     private MemberRepository memberRepository;
     private MemberService memberService;
     private BookingService bookingService;
+    private LectureService lectureService;
 
     public ReviewService (ReviewRepository reviewRepository, BookingRepository bookingRepository,
                           MemberRepository memberRepository, MemberService memberService,
-                          BookingService bookingService){
+                          BookingService bookingService, LectureService lectureService){
         this.reviewRepository=reviewRepository;
         this.bookingRepository=bookingRepository;
         this.memberRepository=memberRepository;
         this.memberService=memberService;
         this.bookingService=bookingService;
+        this.lectureService=lectureService;
     }
 
     public Review postReview(Review review){
         Long memberId = review.getMemberId();
         Long bookingId = review.getBookingId();
+        Long lectureId = review.getLecture_Id();
+        String lectureName = review.getLecture_Name();
+
+        Lecture lecture = lectureService.findLecture(lectureId);
+        if(lecture == null){
+            throw new BusinessLogicException(ExceptionCode.LECTURE_NOT_FOUND);
+        }
 
         Booking checkingBooking = bookingRepository.findBookingStatusByMemberIdAndBookingId(memberId, bookingId);
         Review checkingReview = reviewRepository.findReviewByMemberIdAndBookingId(memberId, bookingId);
@@ -59,6 +72,8 @@ public class ReviewService {
                 Review postReview = setupReview(memberId, bookingId);
                 postReview.setTitle(review.getTitle());
                 postReview.setContent(review.getContent());
+                postReview.setLecture_Id(lectureId);
+                postReview.setLecture_Name(lectureName);
                 return reviewRepository.save(postReview);
             }
         }
@@ -130,5 +145,8 @@ public class ReviewService {
         else {
             return foundReview;
         }
+    }
+    public List<Review> searchReviewByLectureName(String keyword){
+        return reviewRepository.searchReview("%" + keyword + "%");
     }
 }

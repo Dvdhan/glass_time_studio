@@ -19,17 +19,20 @@ public class ReviewDto {
         Long bookingId;
         String title;
         String content;
+        String lecture_Name;
+        Long lecture_Id;
     }
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch{
-        Long reviewId;
         Long memberId;
         Long bookingId;
         String title;
         String content;
+        String lecture_Name;
+        Long lecture_Id;
     }
     @Getter
     @Setter
@@ -39,6 +42,8 @@ public class ReviewDto {
         Long reviewId;
         Long memberId;
         Long bookingId;
+        String lecture_Name;
+        Long lecture_Id;
         String title;
         String content;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

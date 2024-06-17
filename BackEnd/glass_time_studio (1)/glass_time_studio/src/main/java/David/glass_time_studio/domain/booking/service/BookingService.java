@@ -28,8 +28,8 @@ public class BookingService {
     }
 
     // 예약 찾기 (memberId)
-    public Booking findMyBooking(Long memberId){
-        return bookingRepository.findMyBooking(memberId);
+    public List<Booking> findMyBooking(Long memberId){
+        return bookingRepository.findMyBookingOnlyStatusY(memberId);
     }
 
     public Booking findBookingByMemberIdAndBookingId(Long memberId, Long bookingId){
