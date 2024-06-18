@@ -123,9 +123,9 @@ public class ReviewController {
         return ResponseEntity.ok(responseMessage);
     }
 
-    // 리뷰 제목 검색어
+    // 리뷰 검색어 by 수업 이름
     @GetMapping("/searchLectureName")
-    public ResponseEntity<List<ReviewDto.Response>> searchReviewsByTitle(@RequestParam("keyword") String keyword){
+    public ResponseEntity<List<ReviewDto.Response>> searchReviewsByLectureName(@RequestParam("keyword") String keyword){
         log.info("전달받은 검색어: "+keyword);
         List<Review> reviews = reviewService.searchReviewByLectureName(keyword);
         log.info("검색된 REVIEW {}",reviews);
