@@ -14,17 +14,17 @@ public class Review extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long reviewId;
+    Long reviewId;
     @Column
-    private String title;
+    String title;
     @Column
-    private String content;
+    String content;
     @Column
-    private Long memberId;
+    Long memberId;
     @Column
-    private Long bookingId;
+    Long bookingId;
     @Column
-    private String lecture_Name;
+    String lecture_Name;
     @Column
-    private Long lecture_Id;
+    Long lecture_Id;
 }

@@ -148,11 +148,11 @@ function updateTable(reviews) {
         const modifiedAt = new Date(review.modified_at).toLocaleString();
         rows +=
           "<tr>"+
-          "<td><a href='/review/"+review.reviewId+"'>" + review.reviewId + "</a></td>" +
-          "<td><a href='/review/"+review.reviewId+"'>" + review.lecture_Name + "</a></td>" +
-          "<td><a href='/review/"+review.reviewId+"'>" + review.title + "</a></td>" +
-          "<td><a href='/review/"+review.reviewId+"'>" + createdAt + "</a></td>"+
-          "<td><a href='/review/"+review.reviewId+"'>" + modifiedAt + "</a></td>"+
+          "<td><a href='/review/detail/"+review.reviewId+"'>" + review.reviewId + "</a></td>" +
+          "<td><a href='/review/detail/"+review.reviewId+"'>" + review.lecture_Name + "</a></td>" +
+          "<td><a href='/review/detail/"+review.reviewId+"'>" + review.title + "</a></td>" +
+          "<td><a href='/review/detail/"+review.reviewId+"'>" + createdAt + "</a></td>"+
+          "<td><a href='/review/detail/"+review.reviewId+"'>" + modifiedAt + "</a></td>"+
           "</tr>";
     });
     table.innerHTML = rows;
@@ -165,7 +165,7 @@ function bindTableHeaderClicks() {
     document.getElementById('sortByModified').addEventListener('click', () => loadPage(currentPage, sortStates['modified_at'] = toggleSortOrder(sortStates['modified_at']), 'modified_at'));
 }
 
-function search_keyword(){
+function search_keyword(sortOrder = 'asc', sortBy = 'id'){
     var apiEndPoint = "${apiEndPoint}";
     let keyword = document.getElementById('keyword').value;
     console.log("검색어 ", keyword);
@@ -188,8 +188,22 @@ function search_keyword(){
             alert('검색된 결과가 없습니다');
             return;
         }
-
         const reviews = data;
+        // 정렬 조건 확인 및 적용
+        switch (sortBy) {
+            case 'id':
+                reviews.sort((a, b) => sortOrder === 'desc' ? b.reviewId - a.reviewId : a.reviewId - b.reviewId);
+                break;
+            case 'lecture_Name':
+                reviews.sort((a, b) => sortOrder === 'desc' ? b.lecture_Name.localeCompare(a.lecture_Name) : a.lecture_Name.localeCompare(b.lecture_Name));
+                break;
+            case 'created_at':
+                reviews.sort((a, b) => sortOrder === 'desc' ? new Date(b.created_at) - new Date(a.created_at) : new Date(a.created_at) - new Date(b.created_at));
+                break;
+            case 'modified_at':
+                reviews.sort((a, b) => sortOrder === 'desc' ? new Date(b.modified_at) - new Date(a.modified_at) : new Date(a.modified_at) - new Date(b.modified_at));
+                break;
+        }
         const table = document.querySelector("#cont_table");
         let rows = `<tr>
                     <td id="sortById">[게시글 번호]</td>
@@ -207,14 +221,15 @@ function search_keyword(){
                 const modifiedAt = new Date(review.modified_at).toLocaleString();
                 rows +=
                   "<tr>"+
-                  "<td><a href='/review/"+review.reviewId+"'>" + review.reviewId + "</a></td>" +
-                  "<td><a href='/review/"+review.reviewId+"'>" + review.lecture_Name + "</a></td>" +
-                  "<td><a href='/review/"+review.reviewId+"'>" + review.title + "</a></td>" +
-                  "<td><a href='/review/"+review.reviewId+"'>" + createdAt + "</a></td>"+
-                  "<td><a href='/review/"+review.reviewId+"'>" + modifiedAt + "</a></td>"+
+                  "<td><a href='/review/detail/"+review.reviewId+"'>" + review.reviewId + "</a></td>" +
+                  "<td><a href='/review/detail/"+review.reviewId+"'>" + review.lecture_Name + "</a></td>" +
+                  "<td><a href='/review/detail/"+review.reviewId+"'>" + review.title + "</a></td>" +
+                  "<td><a href='/review/detail/"+review.reviewId+"'>" + createdAt + "</a></td>"+
+                  "<td><a href='/review/detail/"+review.reviewId+"'>" + modifiedAt + "</a></td>"+
                   "</tr>";
             });
             table.innerHTML = rows;
+            bindTableHeaderClicks();
         }
     })
     .catch(error => {
